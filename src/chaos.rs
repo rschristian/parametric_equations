@@ -1,10 +1,36 @@
 use crate::models::globals::Globals;
 use crate::models::parameters::{ParamDimensions, Parameters};
+use crate::models::shape::Shapes;
+use crate::visuals::utility::to_screen;
+use crate::config::{SCREEN_RANGE, DELTA_PER_STEP, ITERATIONS};
+use crate::models::coordinate::Coordinate;
 
-pub fn apply_chaos(globals: Globals, params: Parameters) -> (f64, f64) {
-    let nx = calculate_new_coords(globals.t(), params.get_x_dimensions());
-    let ny = calculate_new_coords(globals.t(), params.get_y_dimensions());
-    (nx, ny)
+pub fn apply_chaos(globals: &mut Globals, params: Parameters, vertex_vector: &mut Vec<Shapes>)  {
+    for (i, point) in vertex_vector.iter_mut().enumerate() {
+        let nx = calculate_new_coords(globals.t(), params.get_x_dimensions());
+        let ny = calculate_new_coords(globals.t(), params.get_y_dimensions());
+
+        let screen_point = to_screen(*globals, nx, ny);
+        point[0].set_position(screen_point);
+
+        if (i as u32 + 1) % ITERATIONS as u32 == 0 {
+            if points_on_screen(screen_point) {
+                globals.increase_t(DELTA_PER_STEP * globals.speed_multiplier());
+            } else {
+                globals.increase_t(0.01 * globals.speed_multiplier());
+            }
+        }
+    }
+}
+
+fn points_on_screen(screen_point: Coordinate) -> bool {
+    if SCREEN_RANGE.contains(&screen_point.x()) &&
+        SCREEN_RANGE.contains(&screen_point.y())
+    {
+        true
+    } else {
+        false
+    }
 }
 
 /// Calculates a new coordinate value for a given t and (randomized) parameter values

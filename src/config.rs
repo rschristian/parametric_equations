@@ -1,7 +1,11 @@
 #![allow(dead_code)]
 
+use std::ops::Range;
+
 pub const WINDOW_WIDTH: u32 = 1600;
 pub const WINDOW_HEIGHT: u32 = 900;
+
+pub const SCREEN_RANGE: Range<f64> = -1.0..1.00000001;
 
 pub const ITERATIONS: i32 = 8;
 pub const STEPS: i32 = 5;

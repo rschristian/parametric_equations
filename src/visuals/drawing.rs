@@ -1,16 +1,9 @@
 #![allow(dead_code)]
 
-use crate::chaos;
-use crate::models::coordinate::Coordinate;
 use crate::models::globals::Globals;
-use crate::models::parameters::Parameters;
 use crate::models::shape::Shapes;
 use crate::visuals::utility::to_screen;
 use glium::{Display, Frame, Surface, DrawParameters};
-use crate::visuals::text::TextDimensions;
-use crate::config::ITERATIONS;
-use std::thread::sleep;
-use std::time::Duration;
 
 /// Vertex shader required by Glium
 /// Both color and position are passed in for each vertex,
@@ -69,46 +62,23 @@ fn points_on_screen(globals: Globals, x: f64, y: f64) -> bool {
     on_screen
 }
 
-
-
 /// Draws the vertices on the canvas.
 ///
 /// # Arguments
 ///
 /// * `point_type` - 0-2, the size of the pixel drawn for each vertex
-/// * `display` - A reference to the GL context with a facade for drawing upon
 /// * `vertex_vector` - A reference to a vector containing all vertex information,
 ///                     including position and color
+/// * `display` - A reference to the GL context with a facade for drawing upon
 /// * `target` - A reference to the current frame buffer
 ///
 pub fn draw_vertices(
+    globals: Globals,
+    vertex_vector: &mut Vec<Shapes>,
     display: &Display,
     target: &mut Frame,
-    mut globals: Globals,
-    vertex_vector: &mut Vec<Shapes>,
-    equation_parameters: Parameters,
 ) {
     let params = setup_draw_params(globals.point_size());
-
-    let mut no_points_on_screen = true;
-
-    for (i, point) in vertex_vector.iter_mut().enumerate() {
-        let (nx, ny) = chaos::apply_chaos(globals, equation_parameters);
-
-        no_points_on_screen = !points_on_screen(globals, nx, ny);
-        point[0].set_position(Coordinate::new_with_values(nx, ny));
-
-        if (i as u32 + 1) % ITERATIONS as u32 == 0 {
-            if no_points_on_screen {
-                globals.increase_t(0.01 * globals.speed_multiplier());
-            } else {
-                globals.increase_t(globals.rolling_delta() * globals.speed_multiplier());
-            }
-            no_points_on_screen = true;
-            println!("T: {}", globals.t());
-//            sleep(Duration::new(0, 500));
-        }
-    }
 
     for point in vertex_vector.iter() {
         // Buffer containing pixel data

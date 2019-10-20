@@ -16,6 +16,7 @@ use glium::backend::glutin::glutin::{
     ContextBuilder, Event, EventsLoop, VirtualKeyCode, WindowBuilder, WindowEvent,
 };
 use glium::{Display, Surface};
+use crate::chaos::apply_chaos;
 
 mod chaos;
 mod config;
@@ -42,7 +43,7 @@ fn run_main_loop(mut events_loop: EventsLoop, display: Display) {
     let mut globals = Globals::new();
     let mut equation_parameters = Parameters::new();
     let mut text_dimensions = TextDimensions::new(&display);
-//    let mut vertex_vector = populate_vertex_vector((ITERATIONS * STEPS) as usize);
+    let mut vertex_vector = populate_vertex_vector((ITERATIONS * STEPS) as usize);
 
     let (ref mut x_prime_equation, ref mut y_prime_equation) = reset_and_generate_new(&mut globals, equation_parameters);
 
@@ -60,9 +61,18 @@ fn run_main_loop(mut events_loop: EventsLoop, display: Display) {
         // Draw a blank screen to start with
         target.clear_color(0.0, 0.0, 0.0, 1.0);
 
+//        for point in vertex_vector.iter() {
+//            println!("Coords: X: {}, Y: {}", point[0].get_position().x(), point[0].get_position().y())
+//        }
+
+        apply_chaos(&mut globals, equation_parameters, &mut vertex_vector);
+
+//        for point in vertex_vector.iter() {
+//            println!("Coords: X: {}, Y: {}", point[0].get_position().x(), point[0].get_position().y())
+//        }
+
         // Draw the new points
-//        draw_vertices(&display, &mut target, globals, &mut vertex_vector,
-//                      equation_parameters, &mut text_dimensions);
+        draw_vertices(globals, &mut vertex_vector, &display, &mut target);
 
         // Draw the equations
         draw_equation_text(&x_prime_equation,&y_prime_equation,
@@ -71,7 +81,7 @@ fn run_main_loop(mut events_loop: EventsLoop, display: Display) {
         // Draw the current t-value
         draw_time_text(globals, &text_dimensions, &display, &mut target);
 
-        globals.increase_t(0.10);
+//        globals.increase_t(0.10);
 
         // Shows the prepared frame
         target.finish().unwrap();

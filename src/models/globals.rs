@@ -38,6 +38,10 @@ impl Globals {
         self.rolling_delta
     }
 
+    pub fn set_rolling_delta(&mut self, new_rolling_delta: f64) {
+        self.rolling_delta = new_rolling_delta;
+    }
+
     pub fn speed_multiplier(&self) -> f64 {
         self.speed_multiplier
     }
