@@ -1,6 +1,6 @@
-use crate::models::{color::Color, coordinate::Coordinate};
+use crate::config::{WINDOW_HEIGHT, WINDOW_WIDTH};
 use crate::models::shape::Shapes;
-use crate::config::{WINDOW_WIDTH, WINDOW_HEIGHT};
+use crate::models::{color::Color, coordinate::Coordinate};
 
 /// A vertex is defined by an x,y coordinate point and an associated RGB+Opacity value
 #[derive(Copy, Clone)]

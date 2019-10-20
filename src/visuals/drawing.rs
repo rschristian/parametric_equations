@@ -1,11 +1,6 @@
-#![allow(dead_code)]
-
 use crate::models::globals::Globals;
 use crate::models::shape::Shapes;
-use crate::visuals::utility::to_screen;
-use glium::{Display, Frame, Surface, DrawParameters};
-//use crate::models::vertex::Vertex;
-//use crate::models::coordinate::Coordinate;
+use glium::{Display, DrawParameters, Frame, Surface};
 
 /// Vertex shader required by Glium
 /// Both color and position are passed in for each vertex,
@@ -50,20 +45,6 @@ fn setup_draw_params<'a>(point_size: usize) -> DrawParameters<'a> {
     }
 }
 
-fn points_on_screen(globals: Globals, x: f64, y: f64) -> bool {
-    let screen_point = to_screen(globals, x, y);
-    let mut on_screen = false;
-
-    if screen_point.x() > -1.0
-        && screen_point.y() > -1.0
-        && screen_point.x() < 1.0
-        && screen_point.y() < 1.0
-    {
-        on_screen = true;
-    }
-    on_screen
-}
-
 /// Draws the vertices on the canvas.
 ///
 /// # Arguments
@@ -81,22 +62,22 @@ pub fn draw_vertices(
 ) {
     let draw_parameters = setup_draw_params(globals.point_size());
 
-//    let mut vertex1 = Vertex::new();
-//    vertex1.set_position(Coordinate::new_with_values(-0.5, -0.5));
-//    let mut vertex2 = Vertex::new();
-//    vertex2.set_position(Coordinate::new_with_values(0.0,  0.5));
-//    let mut vertex3 = Vertex::new();
-//    vertex3.set_position(Coordinate::new_with_values(0.5, -0.25));
-//    let shape = vec![vertex1, vertex2, vertex3];
-//
-//    let vertex_buffer = glium::VertexBuffer::new(display, &shape).unwrap();
-//    let index_buffer = glium::index::NoIndices(glium::index::PrimitiveType::TrianglesList);
-//
-//    let program = glium::Program::from_source(display, vertex_shader(),
-//                                              fragment_shader(), None).unwrap();
-//
-//    let uniforms = uniform! { t: globals.t() as f32 };
-//    target.draw(&vertex_buffer, &index_buffer, &program, &uniforms, &draw_parameters).unwrap();
+    //    let mut vertex1 = Vertex::new();
+    //    vertex1.set_position(Coordinate::new_with_values(-0.5, -0.5));
+    //    let mut vertex2 = Vertex::new();
+    //    vertex2.set_position(Coordinate::new_with_values(0.0,  0.5));
+    //    let mut vertex3 = Vertex::new();
+    //    vertex3.set_position(Coordinate::new_with_values(0.5, -0.25));
+    //    let shape = vec![vertex1, vertex2, vertex3];
+    //
+    //    let vertex_buffer = glium::VertexBuffer::new(display, &shape).unwrap();
+    //    let index_buffer = glium::index::NoIndices(glium::index::PrimitiveType::TrianglesList);
+    //
+    //    let program = glium::Program::from_source(display, vertex_shader(),
+    //                                              fragment_shader(), None).unwrap();
+    //
+    //    let uniforms = uniform! { t: globals.t() as f32 };
+    //    target.draw(&vertex_buffer, &index_buffer, &program, &uniforms, &draw_parameters).unwrap();
 
     for point in shape_vector.iter_mut() {
         // Buffer containing pixel data
@@ -105,8 +86,7 @@ pub fn draw_vertices(
 
         // Combines the different shaders into the display for OpenGL
         let program =
-            glium::Program::from_source(display, vertex_shader(),
-                                        fragment_shader(), None).unwrap();
+            glium::Program::from_source(display, vertex_shader(), fragment_shader(), None).unwrap();
 
         // Finally draws everything to the screen
         target

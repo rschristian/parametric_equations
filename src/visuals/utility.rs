@@ -3,7 +3,10 @@ use crate::models::coordinate::Coordinate;
 use crate::models::globals::Globals;
 use crate::models::parameters::{ParamDimensions, Parameters};
 
-pub fn reset_and_generate_new(globals: &mut Globals, equation_parameters: Parameters) -> (String, String) {
+pub fn reset_and_generate_new(
+    globals: &mut Globals,
+    equation_parameters: Parameters,
+) -> (String, String) {
     globals.reset_t();
     let mut x_prime = "x' = ".to_owned();
     let mut y_prime = "y' = ".to_owned();

@@ -5,18 +5,18 @@ extern crate glium;
 
 extern crate cgmath;
 
-use crate::config::{ITERATIONS, STEPS, WINDOW_HEIGHT, WINDOW_WIDTH, T_END};
+use crate::chaos::apply_chaos;
+use crate::config::{ITERATIONS, STEPS, T_END, WINDOW_HEIGHT, WINDOW_WIDTH};
 use crate::models::globals::Globals;
 use crate::models::parameters::Parameters;
 use crate::models::vertex::populate_vertex_vector;
 use crate::visuals::drawing::draw_vertices;
-use crate::visuals::text::{draw_equation_text, TextDimensions, draw_time_text};
+use crate::visuals::text::{draw_equation_text, draw_time_text, TextDimensions};
 use crate::visuals::utility::reset_and_generate_new;
 use glium::backend::glutin::glutin::{
     ContextBuilder, Event, EventsLoop, VirtualKeyCode, WindowBuilder, WindowEvent,
 };
 use glium::{Display, Surface};
-use crate::chaos::apply_chaos;
 
 mod chaos;
 mod config;
@@ -45,12 +45,14 @@ fn run_main_loop(mut events_loop: EventsLoop, display: Display) {
     let mut text_dimensions = TextDimensions::new(&display);
     let mut shape_vector = populate_vertex_vector((ITERATIONS * STEPS) as usize);
 
-    let (ref mut x_prime_equation, ref mut y_prime_equation) = reset_and_generate_new(&mut globals, equation_parameters);
+    let (ref mut x_prime_equation, ref mut y_prime_equation) =
+        reset_and_generate_new(&mut globals, equation_parameters);
 
     while window_open {
         if globals.t() + (0.01 * globals.speed_multiplier()) * STEPS as f64 >= T_END {
-            equation_parameters = Parameters::new();
-            let (nx_prime_equation, ny_prime_equation) = reset_and_generate_new(&mut globals, equation_parameters);
+            equation_parameters.reset_dimensions();
+            let (nx_prime_equation, ny_prime_equation) =
+                reset_and_generate_new(&mut globals, equation_parameters);
             *x_prime_equation = nx_prime_equation;
             *y_prime_equation = ny_prime_equation;
         }
@@ -68,13 +70,16 @@ fn run_main_loop(mut events_loop: EventsLoop, display: Display) {
         draw_vertices(globals, &mut shape_vector, &display, &mut target);
 
         // Draw the equations
-        draw_equation_text(&x_prime_equation,&y_prime_equation,
-                           &mut text_dimensions, &display, &mut target);
+        draw_equation_text(
+            &x_prime_equation,
+            &y_prime_equation,
+            &mut text_dimensions,
+            &display,
+            &mut target,
+        );
 
         // Draw the current t-value
         draw_time_text(globals, &text_dimensions, &display, &mut target);
-
-//        globals.increase_t(0.10);
 
         // Shows the prepared frame
         target.finish().unwrap();

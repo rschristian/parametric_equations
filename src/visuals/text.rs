@@ -134,7 +134,6 @@ pub fn draw_time_text(
 ) {
     let (system, font) = text_setup(display);
 
-
     let truncated_time = format!("{:.6}", globals.t());
     let time_text = "t: ".to_owned() + truncated_time.as_ref();
 
