@@ -43,12 +43,12 @@ fn run_main_loop(mut events_loop: EventsLoop, display: Display) {
     let mut globals = Globals::new();
     let mut equation_parameters = Parameters::new();
     let mut text_dimensions = TextDimensions::new(&display);
-    let mut vertex_vector = populate_vertex_vector((ITERATIONS * STEPS) as usize);
+    let mut shape_vector = populate_vertex_vector((ITERATIONS * STEPS) as usize);
 
     let (ref mut x_prime_equation, ref mut y_prime_equation) = reset_and_generate_new(&mut globals, equation_parameters);
 
     while window_open {
-        if globals.t() >= T_END {
+        if globals.t() + (0.01 * globals.speed_multiplier()) * STEPS as f64 >= T_END {
             equation_parameters = Parameters::new();
             let (nx_prime_equation, ny_prime_equation) = reset_and_generate_new(&mut globals, equation_parameters);
             *x_prime_equation = nx_prime_equation;
@@ -61,18 +61,11 @@ fn run_main_loop(mut events_loop: EventsLoop, display: Display) {
         // Draw a blank screen to start with
         target.clear_color(0.0, 0.0, 0.0, 1.0);
 
-//        for point in vertex_vector.iter() {
-//            println!("Coords: X: {}, Y: {}", point[0].get_position().x(), point[0].get_position().y())
-//        }
-
-        apply_chaos(&mut globals, equation_parameters, &mut vertex_vector);
-
-//        for point in vertex_vector.iter() {
-//            println!("Coords: X: {}, Y: {}", point[0].get_position().x(), point[0].get_position().y())
-//        }
+        // Apply the math to the coordinates
+        apply_chaos(&mut globals, equation_parameters, &mut shape_vector);
 
         // Draw the new points
-        draw_vertices(globals, &mut vertex_vector, &display, &mut target);
+        draw_vertices(globals, &mut shape_vector, &display, &mut target);
 
         // Draw the equations
         draw_equation_text(&x_prime_equation,&y_prime_equation,

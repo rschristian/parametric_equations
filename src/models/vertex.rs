@@ -1,5 +1,6 @@
 use crate::models::{color::Color, coordinate::Coordinate};
 use crate::models::shape::Shapes;
+use crate::config::{WINDOW_WIDTH, WINDOW_HEIGHT};
 
 /// A vertex is defined by an x,y coordinate point and an associated RGB+Opacity value
 #[derive(Copy, Clone)]
@@ -33,12 +34,11 @@ impl Vertex {
     }
 
     // Converts the vertex's position from e.g. 1600 x 900 to -1.0-1.0 in both x and y axis.
-//    pub fn convert_to_gl(&mut self) {
-//        let nx = (self.get_position().x() - (WINDOW_WIDTH / 2) as f64) / (WINDOW_WIDTH / 2) as f64;
-//        let ny =
-//            (self.get_position().y() - (WINDOW_HEIGHT / 2) as f64) / (WINDOW_HEIGHT / 2) as f64;
-//        self.set_position(Coordinate::new_with_values(nx, ny));
-//    }
+    pub fn convert_to_gl(&mut self, new_coordinates: Coordinate) {
+        let nx = (new_coordinates.x() - (WINDOW_WIDTH / 2) as f64) / (WINDOW_WIDTH / 2) as f64;
+        let ny = (new_coordinates.y() - (WINDOW_HEIGHT / 2) as f64) / (WINDOW_HEIGHT / 2) as f64;
+        self.set_position(Coordinate::new_with_values(nx, ny));
+    }
 }
 
 implement_vertex!(Vertex, position, color);

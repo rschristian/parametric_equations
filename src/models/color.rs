@@ -16,7 +16,7 @@ impl Color {
     /// Returns a blank color object that is black and transparent
     pub fn new() -> Color {
         Color {
-            red: 0.0,
+            red: 1.0,
             green: 0.0,
             blue: 0.0,
             opacity: 0.0,

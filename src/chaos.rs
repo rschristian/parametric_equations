@@ -11,10 +11,10 @@ pub fn apply_chaos(globals: &mut Globals, params: Parameters, vertex_vector: &mu
         let ny = calculate_new_coords(globals.t(), params.get_y_dimensions());
 
         let screen_point = to_screen(*globals, nx, ny);
-        point[0].set_position(screen_point);
+        point[0].convert_to_gl(screen_point);
 
         if (i as u32 + 1) % ITERATIONS as u32 == 0 {
-            if points_on_screen(screen_point) {
+            if points_on_screen(point[0].get_position()) {
                 globals.increase_t(DELTA_PER_STEP * globals.speed_multiplier());
             } else {
                 globals.increase_t(0.01 * globals.speed_multiplier());
