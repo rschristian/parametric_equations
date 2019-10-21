@@ -1,16 +1,16 @@
-use crate::config::{DELTA_PER_STEP, SCREEN_RANGE, ITERATIONS};
+use crate::config::{DELTA_PER_STEP, ITERATIONS, SCREEN_RANGE};
 use crate::models::globals::Globals;
 use crate::models::parameters::{ParamDimensions, Parameters};
-use crate::visuals::utility::to_screen;
 use crate::models::vertex::Vertex;
+use crate::visuals::utility::to_screen;
 
 pub fn apply_chaos(globals: &mut Globals, params: Parameters, vertex_vector: &mut Vec<Vertex>) {
     let mut x = globals.t();
     let mut y = globals.t();
 
     for (i, vertex) in vertex_vector.iter_mut().enumerate() {
-        x = calculate_new_coords((x,y), globals.t(), params.get_x_dimensions());
-        y = calculate_new_coords((x,y), globals.t(), params.get_y_dimensions());
+        x = calculate_new_coords((x, y), globals.t(), params.get_x_dimensions());
+        y = calculate_new_coords((x, y), globals.t(), params.get_y_dimensions());
 
         let screen_point = to_screen(*globals, x, y);
         vertex.convert_to_gl(screen_point);

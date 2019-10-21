@@ -23,23 +23,6 @@ impl Coordinate {
     pub fn y(&self) -> f64 {
         self.y
     }
-
-    pub fn xy(&self) -> [f64; 2] {
-        [self.x, self.y]
-    }
-
-    pub fn set_x(&mut self, nx: f64) {
-        self.x = nx;
-    }
-
-    pub fn set_y(&mut self, ny: f64) {
-        self.y = ny;
-    }
-
-    pub fn set_xy(&mut self, nxy: [f64; 2]) {
-        self.x = nxy[0];
-        self.y = nxy[1];
-    }
 }
 
 unsafe impl glium::vertex::Attribute for Coordinate {
