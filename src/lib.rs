@@ -6,7 +6,7 @@ extern crate glium;
 extern crate cgmath;
 
 use crate::chaos::apply_chaos;
-use crate::config::{STEPS, T_END, WINDOW_HEIGHT, WINDOW_WIDTH};
+use crate::config::{ITERATIONS, STEPS, T_END, WINDOW_HEIGHT, WINDOW_WIDTH};
 use crate::models::globals::Globals;
 use crate::models::parameters::Parameters;
 use crate::models::vertex::populate_vertex_vector;
@@ -43,7 +43,7 @@ fn run_main_loop(mut events_loop: EventsLoop, display: Display) {
     let mut globals = Globals::new();
     let mut equation_parameters = Parameters::new();
     let mut text_dimensions = TextDimensions::new(&display);
-    let mut shape_vector = populate_vertex_vector((STEPS) as usize);
+    let mut shape_vector = populate_vertex_vector((ITERATIONS * STEPS) as usize);
 
     let (ref mut x_prime_equation, ref mut y_prime_equation) =
         reset_and_generate_new(&mut globals, equation_parameters);

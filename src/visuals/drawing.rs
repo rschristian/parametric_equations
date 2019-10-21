@@ -1,5 +1,5 @@
 use crate::models::globals::Globals;
-use crate::models::shape::Shapes;
+use crate::models::vertex::Vertex;
 use glium::{Display, DrawParameters, Frame, Surface};
 
 /// Vertex shader required by Glium
@@ -56,7 +56,7 @@ fn setup_draw_params<'a>(point_size: usize) -> DrawParameters<'a> {
 ///
 pub fn draw_vertices(
     globals: Globals,
-    shape_vector: &mut Vec<Shapes>,
+    shape_vector: &mut Vec<Vertex>,
     display: &Display,
     target: &mut Frame,
 ) {
@@ -79,24 +79,24 @@ pub fn draw_vertices(
     //    let uniforms = uniform! { t: globals.t() as f32 };
     //    target.draw(&vertex_buffer, &index_buffer, &program, &uniforms, &draw_parameters).unwrap();
 
-    for point in shape_vector.iter_mut() {
-        // Buffer containing pixel data
-        let vertex_buffer = glium::VertexBuffer::new(display, &point).unwrap();
-        let index_buffer = glium::index::NoIndices(glium::index::PrimitiveType::Points);
+    //    for point in shape_vector.iter_mut() {
+    // Buffer containing pixel data
+    let vertex_buffer = glium::VertexBuffer::new(display, &shape_vector).unwrap();
+    let index_buffer = glium::index::NoIndices(glium::index::PrimitiveType::Points);
 
-        // Combines the different shaders into the display for OpenGL
-        let program =
-            glium::Program::from_source(display, vertex_shader(), fragment_shader(), None).unwrap();
+    // Combines the different shaders into the display for OpenGL
+    let program =
+        glium::Program::from_source(display, vertex_shader(), fragment_shader(), None).unwrap();
 
-        // Finally draws everything to the screen
-        target
-            .draw(
-                &vertex_buffer,
-                &index_buffer,
-                &program,
-                &glium::uniforms::EmptyUniforms,
-                &draw_parameters,
-            )
-            .unwrap();
-    }
+    // Finally draws everything to the screen
+    target
+        .draw(
+            &vertex_buffer,
+            &index_buffer,
+            &program,
+            &glium::uniforms::EmptyUniforms,
+            &draw_parameters,
+        )
+        .unwrap();
+    //    }
 }

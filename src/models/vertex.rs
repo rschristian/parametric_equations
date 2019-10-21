@@ -1,5 +1,4 @@
 use crate::config::{WINDOW_HEIGHT, WINDOW_WIDTH};
-use crate::models::shape::Shapes;
 use crate::models::{color::Color, coordinate::Coordinate};
 
 /// A vertex is defined by an x,y coordinate point and an associated RGB+Opacity value
@@ -49,10 +48,10 @@ implement_vertex!(Vertex, position, color);
 ///
 /// * `amount` - The amount of vertices to be created in this vector
 ///
-pub fn populate_vertex_vector(amount: usize) -> Vec<Shapes> {
-    let mut vertex_array = vec![vec![Vertex::new()]; amount];
+pub fn populate_vertex_vector(amount: usize) -> Vec<Vertex> {
+    let mut vertex_array = vec![Vertex::new(); amount];
     for vertex in &mut vertex_array {
-        vertex[0].color.set_color();
+        vertex.color.set_color();
     }
     vertex_array
 }

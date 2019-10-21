@@ -1,31 +1,38 @@
-use crate::config::{DELTA_PER_STEP, SCREEN_RANGE};
+use crate::config::{DELTA_PER_STEP, ITERATIONS, SCREEN_RANGE};
 use crate::models::globals::Globals;
 use crate::models::parameters::{ParamDimensions, Parameters};
-use crate::models::shape::Shapes;
+use crate::models::vertex::Vertex;
 use crate::visuals::utility::to_screen;
 
-pub fn apply_chaos(globals: &mut Globals, params: Parameters, vertex_vector: &mut Vec<Shapes>) {
-    for (i, point) in vertex_vector.iter_mut().enumerate() {
-        let nx = calculate_new_coords(globals.t(), params.get_x_dimensions());
-        let ny = calculate_new_coords(globals.t(), params.get_y_dimensions());
+pub fn apply_chaos(globals: &mut Globals, params: Parameters, vertex_vector: &mut Vec<Vertex>) {
+    let mut x = globals.t();
+    let mut y = globals.t();
 
-        let screen_point = to_screen(*globals, nx, ny);
-        point[0].convert_to_gl(screen_point);
+    for (i, vertex) in vertex_vector.iter_mut().enumerate() {
+        x = calculate_new_coords((x, y), globals.t(), params.get_x_dimensions());
+        y = calculate_new_coords((x, y), globals.t(), params.get_y_dimensions());
 
-        if SCREEN_RANGE.contains(&point[0].get_position().x())
-            && SCREEN_RANGE.contains(&point[0].get_position().y())
-        {
-            globals.increase_t(DELTA_PER_STEP * globals.speed_multiplier());
-        } else {
-            globals.increase_t(0.01 * globals.speed_multiplier());
+        let screen_point = to_screen(*globals, x, y);
+        vertex.convert_to_gl(screen_point);
+
+        if (i as u32 + 1) % ITERATIONS as u32 == 0 {
+            if SCREEN_RANGE.contains(&vertex.get_position().x())
+                && SCREEN_RANGE.contains(&vertex.get_position().y())
+            {
+                globals.increase_t(DELTA_PER_STEP * globals.speed_multiplier());
+            } else {
+                globals.increase_t(0.01 * globals.speed_multiplier());
+            }
+            x = globals.t();
+            y = globals.t();
         }
     }
 }
 
 /// Calculates a new coordinate value for a given t and (randomized) parameter values
-fn calculate_new_coords(t: f64, params: ParamDimensions) -> f64 {
-    let x = t;
-    let y = t;
+fn calculate_new_coords(xy: (f64, f64), t: f64, params: ParamDimensions) -> f64 {
+    let x: f64 = xy.0;
+    let y: f64 = xy.1;
 
     // Sets variables as humans would understand them in a mathematical context.
     let xx: f64 = x * x;
