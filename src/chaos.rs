@@ -1,4 +1,4 @@
-use crate::config::{DELTA_PER_STEP, ITERATIONS, SCREEN_RANGE};
+use crate::config::{DELTA_PER_STEP, SCREEN_RANGE};
 use crate::models::globals::Globals;
 use crate::models::parameters::{ParamDimensions, Parameters};
 use crate::models::shape::Shapes;
@@ -12,14 +12,12 @@ pub fn apply_chaos(globals: &mut Globals, params: Parameters, vertex_vector: &mu
         let screen_point = to_screen(*globals, nx, ny);
         point[0].convert_to_gl(screen_point);
 
-        if (i as u32 + 1) % ITERATIONS as u32 == 0 {
-            if SCREEN_RANGE.contains(&point[0].get_position().x())
-                && SCREEN_RANGE.contains(&point[0].get_position().y())
-            {
-                globals.increase_t(DELTA_PER_STEP * globals.speed_multiplier());
-            } else {
-                globals.increase_t(0.01 * globals.speed_multiplier());
-            }
+        if SCREEN_RANGE.contains(&point[0].get_position().x())
+            && SCREEN_RANGE.contains(&point[0].get_position().y())
+        {
+            globals.increase_t(DELTA_PER_STEP * globals.speed_multiplier());
+        } else {
+            globals.increase_t(0.01 * globals.speed_multiplier());
         }
     }
 }
