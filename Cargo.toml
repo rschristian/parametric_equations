@@ -5,7 +5,7 @@ authors = ["Ryan Christian <ryanchristian4427@gmail.com>"]
 edition = "2018"
 
 [dependencies]
-glium = "0.23"
+glium = "*"
 rand = "0.7.0"
 glium_text = "0.14.0"
 cgmath = "0.16"
