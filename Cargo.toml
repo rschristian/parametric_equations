@@ -7,5 +7,5 @@ edition = "2018"
 [dependencies]
 glium = "*"
 rand = "0.7.0"
-glium_text = { git = "https://github.com/RyanChristian4427/parametric_equations" }
+glium_text = { git = "https://github.com/RyanChristian4427/glium_text" }
 cgmath = "0.16"
