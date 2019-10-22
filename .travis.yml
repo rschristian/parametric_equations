@@ -1,0 +1,10 @@
+language: rust
+rust: nightly
+dist: xenial
+sudo: false
+
+jobs:
+  include:
+    - stage: "Rust"
+      name: "Cargo Check"
+      script: "cargo check"
