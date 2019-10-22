@@ -1,5 +1,6 @@
 use crate::models::globals::Globals;
-use glium::{Display, Frame};
+use glium::backend::glutin::Display;
+use glium::Frame;
 use glium_text::{FontTexture, TextSystem};
 
 /// Struct for common values needed for all text that is drawn to the screen. Width determines font size,
