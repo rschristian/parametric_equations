@@ -56,7 +56,7 @@ fn create_equation_string(params: ParamDimensions) -> String {
     equation_string
 }
 
-pub fn to_screen(globals: Globals, x: f64, y: f64) -> Coordinate {
+pub fn to_screen(globals: &Globals, x: f64, y: f64) -> Coordinate {
     let s = globals.scale_factor() * (WINDOW_HEIGHT / 2) as f64;
     let nx = WINDOW_WIDTH as f64 * 0.5 + x * s;
     let ny = WINDOW_HEIGHT as f64 * 0.5 + y * s;

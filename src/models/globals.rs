@@ -14,7 +14,7 @@ impl Globals {
             t: T_START,
             speed_multiplier: 1.0,
             scale_factor: 0.25,
-            point_size: 1,
+            point_size: 0,
         }
     }
 

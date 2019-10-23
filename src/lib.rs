@@ -35,7 +35,7 @@ fn run_main_loop(event_loop: glutin::event_loop::EventLoop<()>, display: glium::
     let mut globals = Globals::new();
     let mut equation_parameters = Parameters::new();
     let mut text_dimensions = TextDimensions::new(&display);
-    let mut shape_vector = populate_vertex_vector((ITERATIONS * STEPS) as usize);
+    let mut vertex_vector = populate_vertex_vector((ITERATIONS * STEPS) as usize);
 
     let equations = reset_and_generate_new(&mut globals, equation_parameters);
     let mut x_prime_equation = equations.0;
@@ -81,10 +81,10 @@ fn run_main_loop(event_loop: glutin::event_loop::EventLoop<()>, display: glium::
         target.clear_color(0.0, 0.0, 0.0, 1.0);
 
         // Apply the math to the coordinates
-        apply_chaos(&mut globals, equation_parameters, &mut shape_vector);
+        apply_chaos(&mut globals, equation_parameters, &mut vertex_vector);
 
         // Draw the new points
-        draw_vertices(globals, &mut shape_vector, &display, &mut target);
+        draw_vertices(globals, &mut vertex_vector, &display, &mut target);
 
         // Draw the equations
         draw_equation_text(

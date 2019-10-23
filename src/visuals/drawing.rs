@@ -56,32 +56,14 @@ fn setup_draw_params<'a>(point_size: usize) -> DrawParameters<'a> {
 ///
 pub fn draw_vertices(
     globals: Globals,
-    shape_vector: &mut Vec<Vertex>,
+    vertex_vector: &mut Vec<Vertex>,
     display: &Display,
     target: &mut Frame,
 ) {
     let draw_parameters = setup_draw_params(globals.point_size());
 
-    //    let mut vertex1 = Vertex::new();
-    //    vertex1.set_position(Coordinate::new_with_values(-0.5, -0.5));
-    //    let mut vertex2 = Vertex::new();
-    //    vertex2.set_position(Coordinate::new_with_values(0.0,  0.5));
-    //    let mut vertex3 = Vertex::new();
-    //    vertex3.set_position(Coordinate::new_with_values(0.5, -0.25));
-    //    let shape = vec![vertex1, vertex2, vertex3];
-    //
-    //    let vertex_buffer = glium::VertexBuffer::new(display, &shape).unwrap();
-    //    let index_buffer = glium::index::NoIndices(glium::index::PrimitiveType::TrianglesList);
-    //
-    //    let program = glium::Program::from_source(display, vertex_shader(),
-    //                                              fragment_shader(), None).unwrap();
-    //
-    //    let uniforms = uniform! { t: globals.t() as f32 };
-    //    target.draw(&vertex_buffer, &index_buffer, &program, &uniforms, &draw_parameters).unwrap();
-
-    //    for point in shape_vector.iter_mut() {
     // Buffer containing pixel data
-    let vertex_buffer = glium::VertexBuffer::new(display, &shape_vector).unwrap();
+    let vertex_buffer = glium::VertexBuffer::new(display, &vertex_vector).unwrap();
     let index_buffer = glium::index::NoIndices(glium::index::PrimitiveType::Points);
 
     // Combines the different shaders into the display for OpenGL
@@ -98,5 +80,4 @@ pub fn draw_vertices(
             &draw_parameters,
         )
         .unwrap();
-    //    }
 }

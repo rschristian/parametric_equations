@@ -12,7 +12,7 @@ pub fn apply_chaos(globals: &mut Globals, params: Parameters, vertex_vector: &mu
         x = calculate_new_coords((x, y), globals.t(), params.get_x_dimensions());
         y = calculate_new_coords((x, y), globals.t(), params.get_y_dimensions());
 
-        let screen_point = to_screen(*globals, x, y);
+        let screen_point = to_screen(globals, x, y);
         vertex.convert_to_gl(screen_point);
 
         if (i as u32 + 1) % ITERATIONS as u32 == 0 {
