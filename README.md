@@ -1,4 +1,4 @@
-# Parametric Equation Visualizer
+# Parametric Equation Visualizer [![Build Status](https://travis-ci.org/RyanChristian4427/parametric_equations.svg?branch=master)](https://travis-ci.org/RyanChristian4427/parametric_equations)
 
 This is just a rather simple project that draws randomized parametric equations to a screen, using bright colors and trails.
 
