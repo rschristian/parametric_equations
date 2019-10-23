@@ -1,5 +1,5 @@
-use chaos_equations;
+use parametric_equations;
 
 fn main() {
-    chaos_equations::start();
+    parametric_equations::start();
 }

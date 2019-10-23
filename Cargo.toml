@@ -1,11 +1,11 @@
 [package]
-name = "chaos_equations"
+name = "parametric_equations"
 version = "0.2.0"
 authors = ["Ryan Christian <ryanchristian4427@gmail.com>"]
 edition = "2018"
 
 [dependencies]
-glium = "*"
+glium = "0.26.0-alpha3"
 rand = "0.7.0"
 glium_text = { git = "https://github.com/RyanChristian4427/glium_text" }
 cgmath = "0.16"

@@ -7,16 +7,9 @@ extern crate cgmath;
 
 use crate::chaos::apply_chaos;
 use crate::config::{ITERATIONS, STEPS, T_END, WINDOW_HEIGHT, WINDOW_WIDTH};
-use crate::models::globals::Globals;
-use crate::models::parameters::Parameters;
-use crate::models::vertex::populate_vertex_vector;
-use crate::visuals::drawing::draw_vertices;
-use crate::visuals::text::{draw_equation_text, draw_time_text, TextDimensions};
-use crate::visuals::utility::reset_and_generate_new;
-use glium::backend::glutin::glutin::{
-    ContextBuilder, Event, EventsLoop, VirtualKeyCode, WindowBuilder, WindowEvent,
-};
-use glium::{Display, Surface};
+use crate::models::{globals::Globals, parameters::Parameters, text_dimensions::TextDimensions, vertex::populate_vertex_vector};
+use crate::visuals::{drawing::draw_vertices, text::{draw_equation_text, draw_time_text}, utility::reset_and_generate_new};
+use glium::{glutin, Surface};
 
 mod chaos;
 mod config;
@@ -25,36 +18,60 @@ mod visuals;
 
 /// Start the library. Creates a new window, and calls the main program loop
 pub fn start() {
-    let events_loop = EventsLoop::new();
-    let display = Display::new(
-        WindowBuilder::new()
+    let event_loop = glutin::event_loop::EventLoop::new();
+    let display = glium::Display::new(
+        glutin::window::WindowBuilder::new()
             .with_title("Chaos Equations Visualizer")
-            .with_dimensions((WINDOW_WIDTH, WINDOW_HEIGHT).into()),
-        ContextBuilder::new(),
-        &events_loop,
+            .with_inner_size((WINDOW_WIDTH, WINDOW_HEIGHT).into()),
+        glutin::ContextBuilder::new(),
+        &event_loop,
     )
     .unwrap();
-    run_main_loop(events_loop, display);
+    run_main_loop(event_loop, display);
 }
 
-fn run_main_loop(mut events_loop: EventsLoop, display: Display) {
+fn run_main_loop(event_loop: glutin::event_loop::EventLoop<()>, display: glium::Display) {
     //Set up variables
-    let mut window_open = true;
     let mut globals = Globals::new();
     let mut equation_parameters = Parameters::new();
     let mut text_dimensions = TextDimensions::new(&display);
     let mut shape_vector = populate_vertex_vector((ITERATIONS * STEPS) as usize);
 
-    let (ref mut x_prime_equation, ref mut y_prime_equation) =
-        reset_and_generate_new(&mut globals, equation_parameters);
+    let equations = reset_and_generate_new(&mut globals, equation_parameters);
+    let mut x_prime_equation = equations.0;
+    let mut y_prime_equation = equations.1;
 
-    while window_open {
+    event_loop.run(move |event, _, control_flow| {
+        let next_frame_time = std::time::Instant::now() +
+            std::time::Duration::from_nanos(16_666_667);
+        *control_flow = glutin::event_loop::ControlFlow::WaitUntil(next_frame_time);
+
+        match event {
+            glutin::event::Event::WindowEvent { event, .. } => match event {
+                glutin::event::WindowEvent::CloseRequested => *control_flow = glutin::event_loop::ControlFlow::Exit,
+                glutin::event::WindowEvent::KeyboardInput { input, .. } => {
+                    if let Some(key) = input.virtual_keycode {
+                        match key {
+                            glutin::event::VirtualKeyCode::Escape => *control_flow = glutin::event_loop::ControlFlow::Exit,
+                            _ => return,
+                        }
+                    }
+                }
+                _ => return,
+            },
+            glutin::event::Event::NewEvents(cause) => match cause {
+                glutin::event::StartCause::ResumeTimeReached { .. } => (),
+                glutin::event::StartCause::Init => (),
+                _ => return,
+            },
+            _ => return,
+        }
+
         if globals.t() + (0.01 * globals.speed_multiplier()) * STEPS as f64 >= T_END {
             equation_parameters.reset_dimensions();
-            let (nx_prime_equation, ny_prime_equation) =
-                reset_and_generate_new(&mut globals, equation_parameters);
-            *x_prime_equation = nx_prime_equation;
-            *y_prime_equation = ny_prime_equation;
+            let equations = reset_and_generate_new(&mut globals, equation_parameters);
+            x_prime_equation = equations.0;
+            y_prime_equation = equations.1;
         }
 
         // Needs to be within the loop so that the value isn't borrowed after a move in a previous loop iteration
@@ -83,31 +100,5 @@ fn run_main_loop(mut events_loop: EventsLoop, display: Display) {
 
         // Shows the prepared frame
         target.finish().unwrap();
-
-        // Handle all inputs given by the user, and check to see if window should be closed
-        window_open = event_handler(&mut events_loop)
-    }
-}
-
-/// Handles all user input events.
-fn event_handler(events_loop: &mut EventsLoop) -> bool {
-    let mut window_open = true;
-    events_loop.poll_events(|event| {
-        if let Event::WindowEvent { event, .. } = event {
-            match event {
-                WindowEvent::CloseRequested => window_open = false,
-                WindowEvent::KeyboardInput { input, .. } => {
-                    if let Some(key) = input.virtual_keycode {
-                        match key {
-                            VirtualKeyCode::Escape => window_open = false,
-                            VirtualKeyCode::C => window_open = false,
-                            _ => {}
-                        }
-                    }
-                }
-                _ => (),
-            }
-        }
     });
-    window_open
 }
