@@ -1,7 +1,5 @@
-extern crate rand;
-
 use glium::{vertex::AttributeType, CapabilitiesSource};
-use rand::Rng;
+use std::cmp;
 
 /// Standard RGB color value, with an opacity.
 #[derive(Copy, Clone)]
@@ -23,12 +21,12 @@ impl Color {
         }
     }
 
-    /// Sets the color to a random RGB value, but full opacity
-    pub fn set_color(&mut self) {
-        let mut rng = rand::thread_rng();
-        self.red = rng.gen();
-        self.green = rng.gen();
-        self.blue = rng.gen();
+    /// Sets the color to a RGB value based on index in vertex vector
+    pub fn set_color(&mut self, i: i32) {
+        let i = i + 1;
+        self.red = cmp::min(255, 50 + (i * 11909) % 256) as f32 / 255.0;
+        self.green = cmp::min(255, 50 + (i * 52973) % 256) as f32 / 255.0;
+        self.blue = cmp::min(255, 50 + (i * 44111) % 256) as f32 / 255.0;
         self.opacity = 1.0;
     }
 }

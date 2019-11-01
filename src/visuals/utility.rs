@@ -1,7 +1,9 @@
 use crate::config::{WINDOW_HEIGHT, WINDOW_WIDTH};
-use crate::models::coordinate::Coordinate;
-use crate::models::globals::Globals;
-use crate::models::parameters::{ParamDimensions, Parameters};
+use crate::models::{
+    coordinate::Coordinate,
+    globals::Globals,
+    parameters::{ParamDimensions, Parameters},
+};
 
 pub fn reset_and_generate_new(
     globals: &mut Globals,

@@ -1,4 +1,4 @@
-use crate::config::{WINDOW_HEIGHT, WINDOW_WIDTH};
+use crate::config::{ITERATIONS, STEPS, WINDOW_HEIGHT, WINDOW_WIDTH};
 use crate::models::{color::Color, coordinate::Coordinate};
 
 /// A vertex is defined by an x,y coordinate point and an associated RGB+Opacity value
@@ -48,10 +48,10 @@ implement_vertex!(Vertex, position, color);
 ///
 /// * `amount` - The amount of vertices to be created in this vector
 ///
-pub fn populate_vertex_vector(amount: usize) -> Vec<Vertex> {
-    let mut vertex_array = vec![Vertex::new(); amount];
-    for vertex in &mut vertex_array {
-        vertex.color.set_color();
+pub fn populate_vertex_vector() -> Vec<Vertex> {
+    let mut vertex_array = vec![Vertex::new(); (ITERATIONS * STEPS) as usize];
+    for (i, vertex) in vertex_array.iter_mut().enumerate() {
+        vertex.color.set_color((i + 1) as i32 % ITERATIONS);
     }
     vertex_array
 }
