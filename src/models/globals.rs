@@ -1,20 +1,33 @@
 use crate::config::T_START;
+use glium::Display;
+use glium_text::{FontTexture, TextSystem};
 
-#[derive(Clone, Copy)]
 pub struct Globals {
     t: f64,
     speed_multiplier: f64,
     scale_factor: f64,
     point_size: usize,
+    text_system_font_texture: (TextSystem, FontTexture),
+    display: Display,
 }
 
 impl Globals {
-    pub fn new() -> Globals {
+    pub fn new(display: Display) -> Globals {
         Globals {
             t: T_START,
             speed_multiplier: 1.0,
             scale_factor: 0.25,
             point_size: 0,
+            text_system_font_texture: (
+                glium_text::TextSystem::new(&display),
+                glium_text::FontTexture::new(
+                    &display,
+                    &include_bytes!("../font/comic.ttf")[..],
+                    70,
+                )
+                .unwrap(),
+            ),
+            display,
         }
     }
 
@@ -40,5 +53,13 @@ impl Globals {
 
     pub fn point_size(&self) -> usize {
         self.point_size
+    }
+
+    pub fn text_system_font_texture(&self) -> &(TextSystem, FontTexture) {
+        &self.text_system_font_texture
+    }
+
+    pub fn display(&self) -> &Display {
+        &self.display
     }
 }

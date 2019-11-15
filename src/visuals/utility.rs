@@ -7,34 +7,30 @@ use crate::models::{
 
 pub fn reset_and_generate_new(
     globals: &mut Globals,
-    equation_parameters: Parameters,
+    equation_parameters: &Parameters,
 ) -> (String, String) {
     globals.reset_t();
     let mut x_prime = "x' = ".to_owned();
     let mut y_prime = "y' = ".to_owned();
-    x_prime.push_str(&create_equation_string(
-        equation_parameters.get_x_dimensions(),
-    ));
-    y_prime.push_str(&create_equation_string(
-        equation_parameters.get_y_dimensions(),
-    ));
+    x_prime.push_str(&create_equation_string(equation_parameters.x_dimensions()));
+    y_prime.push_str(&create_equation_string(equation_parameters.y_dimensions()));
     (x_prime, y_prime)
 }
 
-fn create_equation_string(params: ParamDimensions) -> String {
+fn create_equation_string(params: &ParamDimensions) -> String {
     let mut equation_string = "".to_owned();
 
     let equation_variables = ["x^2", "y^2", "t^2", "xy", "xt", "yt", "x", "y", "t"];
     let iter_equation_values = vec![
-        params.get_xx(),
-        params.get_yy(),
-        params.get_tt(),
-        params.get_xy(),
-        params.get_xt(),
-        params.get_yt(),
-        params.get_x(),
-        params.get_y(),
-        params.get_t(),
+        params.xx(),
+        params.yy(),
+        params.tt(),
+        params.xy(),
+        params.xt(),
+        params.yt(),
+        params.x(),
+        params.y(),
+        params.t(),
     ];
 
     let mut is_first = true;

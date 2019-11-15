@@ -1,6 +1,6 @@
 use crate::models::globals::Globals;
 use crate::models::vertex::Vertex;
-use glium::{Display, DrawParameters, Frame, Surface};
+use glium::{DrawParameters, Frame, Surface};
 
 /// Vertex shader required by Glium
 /// Both color and position are passed in for each vertex,
@@ -49,28 +49,23 @@ fn setup_draw_params<'a>(point_size: usize) -> DrawParameters<'a> {
 ///
 /// # Arguments
 ///
-/// * `globals` - Global variables for the app
-/// * `vertex_vector` - A reference to a vector of shapes, and each shape is a vector of vertices
-/// * `display` - A reference to the GL context with a facade for drawing upon
+/// * `globals` - A reference to a struct of global values
 /// * `target` - A reference to the current frame buffer
+/// * `vertex_vector` - A reference to a vector of vertices that are drawn into the lines
 ///
-pub fn draw_vertices(
-    globals: Globals,
-    vertex_vector: &mut Vec<Vertex>,
-    display: &Display,
-    target: &mut Frame,
-) {
+pub fn draw_vertices(globals: &Globals, target: &mut Frame, vertex_vector: &[Vertex]) {
     let draw_parameters = setup_draw_params(globals.point_size());
 
     // Buffer containing pixel data
-    let vertex_buffer = glium::VertexBuffer::new(display, &vertex_vector).unwrap();
+    let vertex_buffer = glium::VertexBuffer::new(globals.display(), &vertex_vector).unwrap();
     let index_buffer = glium::index::NoIndices(glium::index::PrimitiveType::Points);
 
     // Combines the different shaders into the display for OpenGL
     let program =
-        glium::Program::from_source(display, vertex_shader(), fragment_shader(), None).unwrap();
+        glium::Program::from_source(globals.display(), vertex_shader(), fragment_shader(), None)
+            .unwrap();
 
-    // Finally draws everything to the screen
+    // Draws the 'shape' to the screen
     target
         .draw(
             &vertex_buffer,

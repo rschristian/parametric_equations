@@ -1,11 +1,12 @@
 [package]
 name = "parametric_equations"
-version = "0.2.0"
+version = "0.3.0"
 authors = ["Ryan Christian <ryanchristian4427@gmail.com>"]
 edition = "2018"
 
 [dependencies]
-glium = "0.26.0-alpha3"
-rand = "0.7.0"
-glium_text = { git = "https://github.com/RyanChristian4427/glium_text" }
 cgmath = "0.16"
+glium = "0.26.0-alpha3"
+glium_text = { git = "https://github.com/RyanChristian4427/glium_text" }
+image = "0.22.3"
+rand = "0.7.0"

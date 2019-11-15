@@ -1,55 +1,30 @@
-use crate::models::{globals::Globals, text_dimensions::TextDimensions};
-use glium::backend::glutin::Display;
+use crate::models::globals::Globals;
 use glium::Frame;
-use glium_text::{FontTexture, TextSystem};
 
-/// Provides the common values like TextSystem and FontTexture that are necessary for drawing text
-///
-/// # Arguments
-///
-/// * `display` - A reference to the GL context with a facade for drawing upon
-fn text_setup(display: &Display) -> (TextSystem, FontTexture) {
-    (
-        glium_text::TextSystem::new(display),
-        glium_text::FontTexture::new(display, &include_bytes!("font/comic.ttf")[..], 70).unwrap(),
-    )
-}
+// Arbitrary value that looks about correct for a time value with 3 decimal places.
+// Keeps the text static in size
+const TEXT_WIDTH: f32 = 16.2;
 
 /// Draws the current equations to the frame
 ///
 /// # Arguments
 ///
-/// * `x_prime` - A string equation that is currently used to map all x values for the vertices
-/// * `y_prime` - A string equation that is currently used to map all y values for the vertices
-/// * `text_dimensions` - A struct that contains values used to shape and size the text drawn
-/// * `display` - A reference to the GL context with a facade for drawing upon
+/// * `equation_text` - A reference to a tuple that contains the strings for the x & y prime equations
+/// * `globals` - A struct of global values that includes the display and text properties
 /// * `target` - A reference to the current frame buffer
 ///
-pub fn draw_equation_text(
-    x_prime: &str,
-    y_prime: &str,
-    text_dimensions: &mut TextDimensions,
-    display: &Display,
-    target: &mut Frame,
-) {
-    let (system, font) = text_setup(display);
+pub fn draw_equation_text(equation_text: &(String, String), globals: &Globals, target: &mut Frame) {
+    let (system, texture) = globals.text_system_font_texture();
+    let (x_prime, y_prime) = equation_text;
 
-    let x_prime_text = glium_text::TextDisplay::new(&system, &font, x_prime);
-    let y_prime_text = glium_text::TextDisplay::new(&system, &font, y_prime);
-
-    let normalized_width = if x_prime_text.get_width() > y_prime_text.get_width() {
-        x_prime_text.get_width()
-    } else {
-        y_prime_text.get_width()
-    };
-    text_dimensions.set_width(normalized_width);
-
-    let (w, h) = text_dimensions.wh();
+    let x_prime_text = glium_text::TextDisplay::new(system, texture, x_prime);
+    let y_prime_text = glium_text::TextDisplay::new(system, texture, y_prime);
+    let (w, h) = globals.display().get_framebuffer_dimensions();
 
     #[rustfmt::skip]
     let x_prime_matrix: [[f32; 4]; 4] = cgmath::Matrix4::new(
-        0.5 / normalized_width, 0.0, 0.0, 0.0,
-        0.0, 0.5 * (w as f32) / (h as f32) / normalized_width, 0.0, 0.0,
+        0.5 / TEXT_WIDTH, 0.0, 0.0, 0.0,
+        0.0, 0.5 * (w as f32) / (h as f32) / TEXT_WIDTH, 0.0, 0.0,
         0.0, 0.0, 1.0, 0.0,
         -0.98, 0.92, 0.0, 1.0f32,
     )
@@ -57,8 +32,8 @@ pub fn draw_equation_text(
 
     #[rustfmt::skip]
     let y_prime_matrix: [[f32; 4]; 4] = cgmath::Matrix4::new(
-        0.5 / normalized_width, 0.0, 0.0, 0.0,
-        0.0, 0.5 * (w as f32) / (h as f32) / normalized_width, 0.0, 0.0,
+        0.5 / TEXT_WIDTH, 0.0, 0.0, 0.0,
+        0.0, 0.5 * (w as f32) / (h as f32) / TEXT_WIDTH, 0.0, 0.0,
         0.0, 0.0, 1.0, 0.0,
         -0.98, 0.80, 0.0, 1.0f32,
     )
@@ -66,14 +41,14 @@ pub fn draw_equation_text(
 
     glium_text::draw(
         &x_prime_text,
-        &system,
+        system,
         target,
         x_prime_matrix,
         (1.0, 1.0, 1.0, 1.0),
     );
     glium_text::draw(
         &y_prime_text,
-        &system,
+        system,
         target,
         y_prime_matrix,
         (1.0, 1.0, 1.0, 1.0),
@@ -84,39 +59,30 @@ pub fn draw_equation_text(
 ///
 /// # Arguments
 ///
-/// * `globals` - A struct of global values that includes the current t value
-/// * `text_dimensions` - A struct that contains values used to shape and size the text drawn
-/// * `display` - A reference to the GL context with a facade for drawing upon
+/// * `globals` - A struct of global values that includes the current t value and text properties
 /// * `target` - A reference to the current frame buffer
 ///
-pub fn draw_time_text(
-    globals: Globals,
-    text_dimensions: &TextDimensions,
-    display: &Display,
-    target: &mut Frame,
-) {
-    let (system, font) = text_setup(display);
+pub fn draw_time_text(globals: &Globals, target: &mut Frame) {
+    let (system, texture) = globals.text_system_font_texture();
 
-    let truncated_time = format!("{:.6}", globals.t());
+    let truncated_time = format!("{:.4}", globals.t());
     let time_text = "t: ".to_owned() + truncated_time.as_ref();
 
-    let time_text = glium_text::TextDisplay::new(&system, &font, time_text.as_ref());
-    let text_width = text_dimensions.width();
-
-    let (w, h) = text_dimensions.wh();
+    let time_text = glium_text::TextDisplay::new(system, texture, time_text.as_ref());
+    let (w, h) = globals.display().get_framebuffer_dimensions();
 
     #[rustfmt::skip]
     let time_matrix: [[f32; 4]; 4] = cgmath::Matrix4::new(
-        0.5 / text_width, 0.0, 0.0, 0.0,
-        0.0, 0.5 * (w as f32) / (h as f32) / text_width, 0.0, 0.0,
+        0.5 / TEXT_WIDTH, 0.0, 0.0, 0.0,
+        0.0, 0.5 * (w as f32) / (h as f32) / TEXT_WIDTH, 0.0, 0.0,
         0.0, 0.0, 1.0, 0.0,
-        0.78, 0.92, 0.0, 1.0f32,
+        0.80, 0.92, 0.0, 1.0f32,
     )
     .into();
 
     glium_text::draw(
         &time_text,
-        &system,
+        system,
         target,
         time_matrix,
         (1.0, 1.0, 1.0, 1.0),

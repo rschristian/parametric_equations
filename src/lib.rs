@@ -1,13 +1,13 @@
 #[macro_use]
 extern crate glium;
 extern crate cgmath;
+extern crate image;
 
-use crate::config::{STEPS, T_END, WINDOW_HEIGHT, WINDOW_WIDTH};
-use crate::models::{
-    globals::Globals, parameters::Parameters, text_dimensions::TextDimensions, vertex,
-};
-use crate::visuals::{objects, text, utility};
-use glium::{glutin, Surface};
+use crate::config::{DELTA_PER_STEP, STEPS, T_END, WINDOW_HEIGHT, WINDOW_WIDTH};
+use crate::models::{globals::Globals, parameters::Parameters, vertex};
+use crate::visuals::utility;
+use glium::glutin;
+use std::io::Cursor;
 
 mod chaos;
 mod config;
@@ -17,9 +17,24 @@ mod visuals;
 /// Start the library. Creates a new window, and calls the main program loop
 pub fn start() {
     let event_loop = glutin::event_loop::EventLoop::new();
+    let icon = image::load(
+        Cursor::new(&include_bytes!("images/temp-logo.png")[..]),
+        image::PNG,
+    )
+    .unwrap()
+    .to_rgba();
+    let icon_dimensions = icon.dimensions();
     let display = glium::Display::new(
         glutin::window::WindowBuilder::new()
             .with_title("Chaos Equations Visualizer")
+            .with_window_icon(Some(
+                glutin::window::Icon::from_rgba(
+                    icon.to_vec(),
+                    icon_dimensions.0,
+                    icon_dimensions.1,
+                )
+                .unwrap(),
+            ))
             .with_inner_size((WINDOW_WIDTH, WINDOW_HEIGHT).into()),
         glutin::ContextBuilder::new(),
         &event_loop,
@@ -30,14 +45,10 @@ pub fn start() {
 
 fn run_main_loop(event_loop: glutin::event_loop::EventLoop<()>, display: glium::Display) {
     //Set up variables
-    let mut globals = Globals::new();
-    let mut equation_parameters = Parameters::new();
-    let mut text_dimensions = TextDimensions::new(&display);
-    let mut vertex_vector = vertex::populate_vertex_vector();
-
-    let equations = utility::reset_and_generate_new(&mut globals, equation_parameters);
-    let mut x_prime_equation = equations.0;
-    let mut y_prime_equation = equations.1;
+    let mut globals = Globals::new(display);
+    let mut params = Parameters::new();
+    let mut vertex_vector = vertex::create_vertex_vector();
+    let mut equation_text = utility::reset_and_generate_new(&mut globals, &params);
 
     event_loop.run(move |event, _, control_flow| {
         let next_frame_time =
@@ -69,38 +80,12 @@ fn run_main_loop(event_loop: glutin::event_loop::EventLoop<()>, display: glium::
             _ => return,
         }
 
-        if globals.t() + (0.01 * globals.speed_multiplier()) * STEPS as f64 >= T_END {
-            equation_parameters.reset_dimensions();
-            let equations = utility::reset_and_generate_new(&mut globals, equation_parameters);
-            x_prime_equation = equations.0;
-            y_prime_equation = equations.1;
+        if globals.t() + (DELTA_PER_STEP * STEPS as f64) >= T_END {
+            params.reset_dimensions();
+            equation_text = utility::reset_and_generate_new(&mut globals, &params);
+            vertex_vector = vertex::create_vertex_vector();
         }
 
-        // Needs to be within the loop so that the value isn't borrowed after a move in a previous loop iteration
-        let mut target = display.draw();
-
-        // Draw a blank screen to start with
-        target.clear_color(0.0, 0.0, 0.0, 1.0);
-
-        // Apply the math to the coordinates
-        chaos::apply_chaos(&mut globals, equation_parameters, &mut vertex_vector);
-
-        // Draw the new points
-        objects::draw_vertices(globals, &mut vertex_vector, &display, &mut target);
-
-        // Draw the equations
-        text::draw_equation_text(
-            &x_prime_equation,
-            &y_prime_equation,
-            &mut text_dimensions,
-            &display,
-            &mut target,
-        );
-
-        // Draw the current t-value
-        text::draw_time_text(globals, &text_dimensions, &display, &mut target);
-
-        // Shows the prepared frame
-        target.finish().unwrap();
+        chaos::apply_chaos(&equation_text, &mut globals, &params, &mut vertex_vector);
     });
 }

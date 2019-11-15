@@ -22,10 +22,10 @@ Cargo
 To run the app from source: 
 
 ```
-cargo run
+cargo run --release
 ```
 
-After the dependencies are downloaded and compiled, the visualizer should be ran.
+After the dependencies are downloaded and compiled, the visualizer should be ran. I do recommend running the release build, as there is a large performance increase over the debug build.
 
 
 ### Code Style
