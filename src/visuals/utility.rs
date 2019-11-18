@@ -20,7 +20,7 @@ pub fn reset_and_generate_new(
 fn create_equation_string(params: &ParamDimensions) -> String {
     let mut equation_string = "".to_owned();
 
-    let equation_variables = ["x^2", "y^2", "t^2", "xy", "xt", "yt", "x", "y", "t"];
+    let equation_variables = ["x\u{b2}", "y\u{b2}", "t\u{b2}", "xy", "xt", "yt", "x", "y", "t"];
     let iter_equation_values = vec![
         params.xx(),
         params.yy(),
