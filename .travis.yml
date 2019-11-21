@@ -10,7 +10,6 @@ jobs:
   allow_failures:
     - rust: nightly
   fast_finish: true
-  include:
-    - stage: "Check"
-      name: "Cargo Check"
-      script: "cargo check --verbose"
+
+script:
+  - cargo check --verbose
