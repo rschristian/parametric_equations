@@ -14,7 +14,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ```
 Rustup
-  - Tested against latest stable, beta, and nightly. Look at CI for more info.
+  - Tested against latest stable, beta, and nightly. Look at CI status for more info.
 Cargo
 ```
 
