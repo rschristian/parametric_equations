@@ -76,7 +76,7 @@ pub fn draw_time_text(globals: &Globals, target: &mut Frame) {
         0.5 / TEXT_WIDTH, 0.0, 0.0, 0.0,
         0.0, 0.5 * (w as f32) / (h as f32) / TEXT_WIDTH, 0.0, 0.0,
         0.0, 0.0, 1.0, 0.0,
-        0.80, 0.92, 0.0, 1.0f32,
+        0.72, 0.92, 0.0, 1.0f32,
     )
     .into();
 
