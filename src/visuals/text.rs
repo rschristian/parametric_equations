@@ -89,6 +89,13 @@ pub fn draw_time_text(globals: &Globals, target: &mut Frame) {
     );
 }
 
+/// Draws the current speed multiplier to the frame
+///
+/// # Arguments
+///
+/// * `globals` - A struct of global values that includes the current multiplier value and text properties
+/// * `target` - A reference to the current frame buffer
+///
 pub fn draw_speed_multiplier_text(globals: &Globals, target: &mut Frame) {
     let (system, texture) = globals.text_system_font_texture();
 
