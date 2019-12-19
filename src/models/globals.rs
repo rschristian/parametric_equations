@@ -22,7 +22,7 @@ impl Globals {
                 glium_text::TextSystem::new(&display),
                 glium_text::FontTexture::new(
                     &display,
-                    &include_bytes!("../font/comic.ttf")[..],
+                    &include_bytes!("../font/sf-regular.otf")[..],
                     70,
                 )
                 .unwrap(),
