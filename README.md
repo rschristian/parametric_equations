@@ -13,7 +13,8 @@ These instructions will get you a copy of the project up and running on your loc
 ### Prerequisites
 
 ```
-Rustup, tested with 1.39 nightly
+Rustup
+  - Tested against latest stable, beta, and nightly. Look at CI status for more info.
 Cargo
 ```
 

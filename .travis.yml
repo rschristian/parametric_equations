@@ -1,10 +1,15 @@
 language: rust
-rust: stable
+rust:
+  - stable
+  - beta
+  - nightly
 dist: xenial
 sudo: false
 
 jobs:
-  include:
-    - stage: "Check"
-      name: "Cargo Check"
-      script: "cargo check"
+  allow_failures:
+    - rust: nightly
+  fast_finish: true
+
+script:
+  - cargo check --verbose
