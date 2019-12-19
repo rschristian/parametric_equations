@@ -15,7 +15,7 @@ impl Globals {
     pub fn new(display: Display) -> Globals {
         Globals {
             t: T_START,
-            speed_multiplier: 1.0,
+            speed_multiplier: 3.0,
             scale_factor: 0.25,
             point_size: 0,
             text_system_font_texture: (
@@ -45,6 +45,10 @@ impl Globals {
 
     pub fn speed_multiplier(&self) -> f64 {
         self.speed_multiplier
+    }
+
+    pub fn increase_speed_multiplier(&mut self, additional_value: f64) {
+        self.speed_multiplier += additional_value;
     }
 
     pub fn scale_factor(&self) -> f64 {

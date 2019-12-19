@@ -52,7 +52,7 @@ fn run_main_loop(event_loop: glutin::event_loop::EventLoop<()>, display: glium::
 
     event_loop.run(move |event, _, control_flow| {
         let next_frame_time =
-            std::time::Instant::now() + std::time::Duration::from_nanos(16_666_667);
+            std::time::Instant::now() + std::time::Duration::from_nanos(18_666_667);
         *control_flow = glutin::event_loop::ControlFlow::WaitUntil(next_frame_time);
 
         match event {
@@ -65,6 +65,12 @@ fn run_main_loop(event_loop: glutin::event_loop::EventLoop<()>, display: glium::
                         match key {
                             glutin::event::VirtualKeyCode::Escape => {
                                 *control_flow = glutin::event_loop::ControlFlow::Exit
+                            }
+                            glutin::event::VirtualKeyCode::Up => {
+                                    globals.increase_speed_multiplier(0.05)
+                            }
+                            glutin::event::VirtualKeyCode::Down => {
+                                    globals.increase_speed_multiplier(-0.05)
                             }
                             _ => return,
                         }
