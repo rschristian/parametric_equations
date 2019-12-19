@@ -88,3 +88,30 @@ pub fn draw_time_text(globals: &Globals, target: &mut Frame) {
         (1.0, 1.0, 1.0, 1.0),
     );
 }
+
+pub fn draw_speed_multiplier_text(globals: &Globals, target: &mut Frame) {
+    let (system, texture) = globals.text_system_font_texture();
+
+    let truncated_multiplier = format!("{:.2}", globals.speed_multiplier());
+    let speed_multiplier_text = "Speed Multiplier: ".to_owned() + truncated_multiplier.as_ref();
+
+    let speed_multiplier_text = glium_text::TextDisplay::new(system, texture, speed_multiplier_text.as_ref());
+    let (w, h) = globals.display().get_framebuffer_dimensions();
+
+    #[rustfmt::skip]
+    let speed_multiplier_matrix: [[f32; 4]; 4] = cgmath::Matrix4::new(
+        0.5 / TEXT_WIDTH, 0.0, 0.0, 0.0,
+        0.0, 0.5 * (w as f32) / (h as f32) / TEXT_WIDTH, 0.0, 0.0,
+        0.0, 0.0, 1.0, 0.0,
+        -0.98, 0.60, 0.0, 1.0f32,
+    )
+    .into();
+
+    glium_text::draw(
+        &speed_multiplier_text,
+        system,
+        target,
+        speed_multiplier_matrix,
+        (1.0, 1.0, 1.0, 1.0),
+    );
+}
