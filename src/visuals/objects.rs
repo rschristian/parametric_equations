@@ -38,7 +38,7 @@ fn fragment_shader() -> &'static str {
 
 fn setup_draw_params<'a>(point_size: usize) -> DrawParameters<'a> {
     // Determines pixel size
-    const POINT_SIZES: [f32; 3] = [1.0, 3.0, 10.0];
+    const POINT_SIZES: [f32; 3] = [1.0, 3.0, 5.0];
     glium::DrawParameters {
         point_size: Some(POINT_SIZES[point_size]),
         ..Default::default()
