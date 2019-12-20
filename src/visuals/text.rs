@@ -102,7 +102,8 @@ pub fn draw_speed_multiplier_text(globals: &Globals, target: &mut Frame) {
     let truncated_multiplier = format!("{:.2}", globals.speed_multiplier());
     let speed_multiplier_text = "Speed Multiplier: ".to_owned() + truncated_multiplier.as_ref();
 
-    let speed_multiplier_text = glium_text::TextDisplay::new(system, texture, speed_multiplier_text.as_ref());
+    let speed_multiplier_text =
+        glium_text::TextDisplay::new(system, texture, speed_multiplier_text.as_ref());
     let (w, h) = globals.display().get_framebuffer_dimensions();
 
     #[rustfmt::skip]
