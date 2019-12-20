@@ -123,3 +123,38 @@ pub fn draw_speed_multiplier_text(globals: &Globals, target: &mut Frame) {
         (1.0, 1.0, 1.0, 1.0),
     );
 }
+
+/// Draws the current point size to the frame
+///
+/// # Arguments
+///
+/// * `globals` - A struct of global values that includes the current point size and text properties
+/// * `target` - A reference to the current frame buffer
+///
+pub fn draw_point_size_text(globals: &Globals, target: &mut Frame) {
+    let (system, texture) = globals.text_system_font_texture();
+
+    let point_size_string = (globals.point_size() + 1).to_string();
+    let point_size_text = "Point Size: ".to_owned() + point_size_string.as_ref();
+
+    let point_size_text =
+        glium_text::TextDisplay::new(system, texture, point_size_text.as_ref());
+    let (w, h) = globals.display().get_framebuffer_dimensions();
+
+    #[rustfmt::skip]
+    let point_size_matrix: [[f32; 4]; 4] = cgmath::Matrix4::new(
+        0.5 / TEXT_WIDTH, 0.0, 0.0, 0.0,
+        0.0, 0.5 * (w as f32) / (h as f32) / TEXT_WIDTH, 0.0, 0.0,
+        0.0, 0.0, 1.0, 0.0,
+        -0.98, 0.50, 0.0, 1.0f32,
+    )
+    .into();
+
+    glium_text::draw(
+        &point_size_text,
+        system,
+        target,
+        point_size_matrix,
+        (1.0, 1.0, 1.0, 1.0),
+    );
+}

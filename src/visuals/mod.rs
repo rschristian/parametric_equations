@@ -24,6 +24,7 @@ pub fn draw_all(
     text::draw_equation_text(equation_text, globals, &mut target);
     text::draw_time_text(globals, &mut target);
     text::draw_speed_multiplier_text(globals, &mut target);
+    text::draw_point_size_text(globals, &mut target);
 
     target.finish().unwrap();
 }
