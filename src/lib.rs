@@ -68,12 +68,12 @@ fn run_main_loop(event_loop: glutin::event_loop::EventLoop<()>, display: glium::
                             }
                             glutin::event::VirtualKeyCode::Up => {
                                 if input.state == glutin::event::ElementState::Pressed {
-                                    globals.increase_speed_multiplier(0.05)
+                                    globals.increase_speed_multiplier(0.1)
                                 }
                             }
                             glutin::event::VirtualKeyCode::Down => {
                                 if input.state == glutin::event::ElementState::Pressed {
-                                    globals.increase_speed_multiplier(-0.05)
+                                    globals.increase_speed_multiplier(-0.1)
                                 }
                             }
                             _ => return,
