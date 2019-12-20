@@ -1,9 +1,6 @@
 use crate::models::globals::Globals;
 use glium::Frame;
-
-// Arbitrary value that looks about correct for a time value with 3 decimal places.
-// Keeps the text static in size
-const TEXT_WIDTH: f32 = 16.2;
+use crate::config::{TITLE_TEXT_WIDTH, SUBTITLE_TEXT_WIDTH};
 
 /// Draws the current equations to the frame
 ///
@@ -23,8 +20,8 @@ pub fn draw_equation_text(equation_text: &(String, String), globals: &Globals, t
 
     #[rustfmt::skip]
     let x_prime_matrix: [[f32; 4]; 4] = cgmath::Matrix4::new(
-        0.5 / TEXT_WIDTH, 0.0, 0.0, 0.0,
-        0.0, 0.5 * (w as f32) / (h as f32) / TEXT_WIDTH, 0.0, 0.0,
+        0.5 / TITLE_TEXT_WIDTH, 0.0, 0.0, 0.0,
+        0.0, 0.5 * (w as f32) / (h as f32) / TITLE_TEXT_WIDTH, 0.0, 0.0,
         0.0, 0.0, 1.0, 0.0,
         -0.98, 0.92, 0.0, 1.0f32,
     )
@@ -32,8 +29,8 @@ pub fn draw_equation_text(equation_text: &(String, String), globals: &Globals, t
 
     #[rustfmt::skip]
     let y_prime_matrix: [[f32; 4]; 4] = cgmath::Matrix4::new(
-        0.5 / TEXT_WIDTH, 0.0, 0.0, 0.0,
-        0.0, 0.5 * (w as f32) / (h as f32) / TEXT_WIDTH, 0.0, 0.0,
+        0.5 / TITLE_TEXT_WIDTH, 0.0, 0.0, 0.0,
+        0.0, 0.5 * (w as f32) / (h as f32) / TITLE_TEXT_WIDTH, 0.0, 0.0,
         0.0, 0.0, 1.0, 0.0,
         -0.98, 0.80, 0.0, 1.0f32,
     )
@@ -73,8 +70,8 @@ pub fn draw_time_text(globals: &Globals, target: &mut Frame) {
 
     #[rustfmt::skip]
     let time_matrix: [[f32; 4]; 4] = cgmath::Matrix4::new(
-        0.5 / TEXT_WIDTH, 0.0, 0.0, 0.0,
-        0.0, 0.5 * (w as f32) / (h as f32) / TEXT_WIDTH, 0.0, 0.0,
+        0.5 / TITLE_TEXT_WIDTH, 0.0, 0.0, 0.0,
+        0.0, 0.5 * (w as f32) / (h as f32) / TITLE_TEXT_WIDTH, 0.0, 0.0,
         0.0, 0.0, 1.0, 0.0,
         0.72, 0.92, 0.0, 1.0f32,
     )
@@ -108,8 +105,8 @@ pub fn draw_speed_multiplier_text(globals: &Globals, target: &mut Frame) {
 
     #[rustfmt::skip]
     let speed_multiplier_matrix: [[f32; 4]; 4] = cgmath::Matrix4::new(
-        0.5 / TEXT_WIDTH, 0.0, 0.0, 0.0,
-        0.0, 0.5 * (w as f32) / (h as f32) / TEXT_WIDTH, 0.0, 0.0,
+        0.5 / SUBTITLE_TEXT_WIDTH, 0.0, 0.0, 0.0,
+        0.0, 0.5 * (w as f32) / (h as f32) / SUBTITLE_TEXT_WIDTH, 0.0, 0.0,
         0.0, 0.0, 1.0, 0.0,
         -0.98, 0.60, 0.0, 1.0f32,
     )
@@ -143,8 +140,8 @@ pub fn draw_point_size_text(globals: &Globals, target: &mut Frame) {
 
     #[rustfmt::skip]
     let point_size_matrix: [[f32; 4]; 4] = cgmath::Matrix4::new(
-        0.5 / TEXT_WIDTH, 0.0, 0.0, 0.0,
-        0.0, 0.5 * (w as f32) / (h as f32) / TEXT_WIDTH, 0.0, 0.0,
+        0.5 / SUBTITLE_TEXT_WIDTH, 0.0, 0.0, 0.0,
+        0.0, 0.5 * (w as f32) / (h as f32) / SUBTITLE_TEXT_WIDTH, 0.0, 0.0,
         0.0, 0.0, 1.0, 0.0,
         -0.98, 0.50, 0.0, 1.0f32,
     )
