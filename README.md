@@ -28,6 +28,7 @@ cargo run --release
 
 After the dependencies are downloaded and compiled, the visualizer should be ran. I do recommend running the release build, as there is a large performance increase over the debug build.
 
+The application does have a few controls, use the up and down keys to increase or decrease the speed multiplier, and the page up key will loop through the different point size options.
 
 ### Code Style
 
