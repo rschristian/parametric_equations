@@ -36,7 +36,8 @@ pub fn start() {
                 .unwrap(),
             ))
             .with_inner_size((WINDOW_WIDTH, WINDOW_HEIGHT).into()),
-        glutin::ContextBuilder::new(),
+        glutin::ContextBuilder::new()
+            .with_depth_buffer(24),
         &event_loop,
     )
     .unwrap();

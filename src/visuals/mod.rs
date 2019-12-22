@@ -17,7 +17,7 @@ pub fn draw_all(
     vertex_vector: &mut Vec<Vertex>,
 ) {
     let mut target = globals.display().draw();
-    target.clear_color(0.0, 0.0, 0.0, 1.0);
+    target.clear_color_and_depth((0.0, 0.0, 0.0, 1.0), 1.0);
 
     objects::draw_vertices(globals, &mut target, &vertex_vector);
 
