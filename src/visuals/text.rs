@@ -1,6 +1,6 @@
+use crate::config::{SUBTITLE_TEXT_WIDTH, TITLE_TEXT_WIDTH};
 use crate::models::globals::Globals;
 use glium::Frame;
-use crate::config::{TITLE_TEXT_WIDTH, SUBTITLE_TEXT_WIDTH};
 
 /// Draws the current equations to the frame
 ///
@@ -134,8 +134,7 @@ pub fn draw_point_size_text(globals: &Globals, target: &mut Frame) {
     let point_size_string = (globals.point_size() + 1).to_string();
     let point_size_text = "Point Size: ".to_owned() + point_size_string.as_ref();
 
-    let point_size_text =
-        glium_text::TextDisplay::new(system, texture, point_size_text.as_ref());
+    let point_size_text = glium_text::TextDisplay::new(system, texture, point_size_text.as_ref());
     let (w, h) = globals.display().get_framebuffer_dimensions();
 
     #[rustfmt::skip]
