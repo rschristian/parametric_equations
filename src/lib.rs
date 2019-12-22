@@ -37,7 +37,8 @@ pub fn start() {
             ))
             .with_inner_size((WINDOW_WIDTH, WINDOW_HEIGHT).into()),
         glutin::ContextBuilder::new()
-            .with_depth_buffer(24),
+            .with_depth_buffer(24)
+            .with_multisampling(4),
         &event_loop,
     )
     .unwrap();
