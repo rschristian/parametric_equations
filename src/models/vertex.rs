@@ -25,12 +25,13 @@ impl Vertex {
     ///
     /// * `i` - The index of the vertex in a vector
     ///
-    pub fn set_color(&mut self, i: i32) {
+    pub fn set_color(&mut self, i: i32, alpha_offset: f32) {
         let i = i + 1;
         let red = cmp::min(255, 50 + (i * 11909) % 256) as f32 / 255.0;
         let green = cmp::min(255, 50 + (i * 52973) % 256) as f32 / 255.0;
         let blue = cmp::min(255, 50 + (i * 44111) % 256) as f32 / 255.0;
-        self.color = [red, green, blue, 1.0];
+        println!("New Color: {} {} {} {}", red, green, blue, 1.0 - alpha_offset);
+        self.color = [red, green, blue, 1.0 - alpha_offset];
     }
 
     /// Returns the current coord location of a vertex
@@ -66,8 +67,12 @@ implement_vertex!(Vertex, position, color);
 /// Creates a vector of vertices with default coordinates and random colors
 pub fn create_vertex_vector() -> Vec<Vertex> {
     let mut vertex_array = vec![Vertex::new(); (ITERATIONS * STEPS) as usize];
+    let mut alpha_offset = 0.0;
     for (i, vertex) in vertex_array.iter_mut().enumerate() {
-        vertex.set_color((i + 1) as i32 % ITERATIONS);
+        if (i + 1) as i32 % ITERATIONS == 0 {
+            alpha_offset += 1.0/(ITERATIONS as f32);
+        }
+        vertex.set_color((i + 1) as i32 % ITERATIONS, alpha_offset);
     }
     vertex_array
 }
