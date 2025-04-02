@@ -49,9 +49,9 @@ pub fn apply_chaos(
         } else {
             globals.increase_t(0.01 * globals.speed_multiplier());
         }
-
-        visuals::draw_all(equation_text, globals, vertex_vector);
     }
+
+    visuals::draw_all(equation_text, globals, vertex_vector);
 }
 
 /// Calculates a new coordinate value for a given t and (randomized) parameter values

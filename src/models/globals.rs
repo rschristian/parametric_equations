@@ -15,7 +15,7 @@ impl Globals {
     pub fn new(display: Display) -> Globals {
         Globals {
             t: T_START,
-            speed_multiplier: 3.0,
+            speed_multiplier: 1.0,
             scale_factor: 0.25,
             point_size: 0,
             text_system_font_texture: (
