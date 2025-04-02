@@ -19,9 +19,10 @@ pub fn start() {
     let display = glium::Display::new(
         glutin::window::WindowBuilder::new()
             .with_title("Chaos Equations Visualizer")
-            .with_inner_size(
-                glutin::dpi::LogicalSize::new(WINDOW_WIDTH.into(), WINDOW_HEIGHT.into()),
-            ),
+            .with_inner_size(glutin::dpi::LogicalSize::new(
+                WINDOW_WIDTH.into(),
+                WINDOW_HEIGHT.into(),
+            )),
         glutin::ContextBuilder::new()
             .with_depth_buffer(24)
             .with_multisampling(4),

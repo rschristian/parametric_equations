@@ -69,7 +69,7 @@ pub fn create_vertex_vector() -> Vec<Vertex> {
     let mut alpha_offset = 0.0;
     for (i, vertex) in vertex_array.iter_mut().enumerate() {
         if (i + 1) as i32 % ITERATIONS == 0 {
-            alpha_offset += 1.0/(ITERATIONS as f32);
+            alpha_offset += 1.0 / (ITERATIONS as f32);
         }
         vertex.set_color((i + 1) as i32 % ITERATIONS, alpha_offset);
     }
