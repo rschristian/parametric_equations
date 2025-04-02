@@ -30,7 +30,6 @@ impl Vertex {
         let red = cmp::min(255, 50 + (i * 11909) % 256) as f32 / 255.0;
         let green = cmp::min(255, 50 + (i * 52973) % 256) as f32 / 255.0;
         let blue = cmp::min(255, 50 + (i * 44111) % 256) as f32 / 255.0;
-        println!("New Color: {} {} {} {}", red, green, blue, 1.0 - alpha_offset);
         self.color = [red, green, blue, 1.0 - alpha_offset];
     }
 
