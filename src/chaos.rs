@@ -21,7 +21,7 @@ pub fn apply_chaos(
     equation_text: &(String, String),
     globals: &mut Globals,
     params: &Parameters,
-    vertex_vector: &mut Vec<Vertex>,
+    vertex_vector: &mut [Vertex],
 ) {
     for step in 0..STEPS {
         let mut x = globals.t();

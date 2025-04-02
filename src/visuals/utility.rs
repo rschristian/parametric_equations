@@ -23,7 +23,7 @@ fn create_equation_string(params: &ParamDimensions) -> String {
     let equation_variables = [
         "x\u{b2}", "y\u{b2}", "t\u{b2}", "xy", "xt", "yt", "x", "y", "t",
     ];
-    let iter_equation_values = vec![
+    let iter_equation_values = [
         params.xx(),
         params.yy(),
         params.tt(),
@@ -40,7 +40,7 @@ fn create_equation_string(params: &ParamDimensions) -> String {
         if iter_equation_values[i] as i32 != 0 {
             if is_first {
                 if iter_equation_values[i] as i32 == -1 {
-                    equation_string.push_str("-");
+                    equation_string.push('-');
                 }
             } else if iter_equation_values[i] as i32 == -1 {
                 equation_string.push_str(" - ");
@@ -52,7 +52,7 @@ fn create_equation_string(params: &ParamDimensions) -> String {
             is_first = false;
         }
     }
-    equation_string.push_str("\n");
+    equation_string.push('\n');
     equation_string
 }
 

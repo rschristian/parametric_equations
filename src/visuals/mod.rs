@@ -14,12 +14,12 @@ pub mod utility;
 pub fn draw_all(
     equation_text: &(String, String),
     globals: &mut Globals,
-    vertex_vector: &mut Vec<Vertex>,
+    vertex_vector: &mut [Vertex],
 ) {
     let mut target = globals.display().draw();
     target.clear_color_and_depth((0.0, 0.0, 0.0, 1.0), 1.0);
 
-    objects::draw_vertices(globals, &mut target, &vertex_vector);
+    objects::draw_vertices(globals, &mut target, vertex_vector);
 
     text::draw_equation_text(equation_text, globals, &mut target);
     text::draw_time_text(globals, &mut target);

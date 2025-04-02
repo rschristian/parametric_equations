@@ -59,7 +59,7 @@ pub fn draw_vertices(globals: &Globals, target: &mut Frame, vertex_vector: &[Ver
     let draw_parameters = setup_draw_params(globals.point_size());
 
     // Buffer containing pixel data
-    let vertex_buffer = glium::VertexBuffer::new(globals.display(), &vertex_vector).unwrap();
+    let vertex_buffer = glium::VertexBuffer::new(globals.display(), vertex_vector).unwrap();
     let index_buffer = glium::index::NoIndices(glium::index::PrimitiveType::Points);
 
     // Combines the different shaders into the display for OpenGL
@@ -71,7 +71,7 @@ pub fn draw_vertices(globals: &Globals, target: &mut Frame, vertex_vector: &[Ver
     target
         .draw(
             &vertex_buffer,
-            &index_buffer,
+            index_buffer,
             &program,
             &glium::uniforms::EmptyUniforms,
             &draw_parameters,
