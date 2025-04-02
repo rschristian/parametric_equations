@@ -7,7 +7,6 @@ use crate::config::{DELTA_PER_STEP, STEPS, T_END, WINDOW_HEIGHT, WINDOW_WIDTH};
 use crate::models::{globals::Globals, parameters::Parameters, vertex};
 use crate::visuals::utility;
 use glium::glutin;
-use std::io::Cursor;
 
 mod chaos;
 mod config;
@@ -17,25 +16,12 @@ mod visuals;
 /// Start the library. Creates a new window, and calls the main program loop
 pub fn start() {
     let event_loop = glutin::event_loop::EventLoop::new();
-    let icon = image::load(
-        Cursor::new(&include_bytes!("images/temp-logo.png")[..]),
-        image::PNG,
-    )
-    .unwrap()
-    .to_rgba();
-    let icon_dimensions = icon.dimensions();
     let display = glium::Display::new(
         glutin::window::WindowBuilder::new()
             .with_title("Chaos Equations Visualizer")
-            .with_window_icon(Some(
-                glutin::window::Icon::from_rgba(
-                    icon.to_vec(),
-                    icon_dimensions.0,
-                    icon_dimensions.1,
-                )
-                .unwrap(),
-            ))
-            .with_inner_size((WINDOW_WIDTH, WINDOW_HEIGHT).into()),
+            .with_inner_size(
+                glutin::dpi::LogicalSize::new(WINDOW_WIDTH.into(), WINDOW_HEIGHT.into()),
+            ),
         glutin::ContextBuilder::new()
             .with_depth_buffer(24)
             .with_multisampling(4),
