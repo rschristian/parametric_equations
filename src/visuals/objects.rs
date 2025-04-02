@@ -41,8 +41,31 @@ fn setup_draw_params<'a>(point_size: usize) -> DrawParameters<'a> {
     const POINT_SIZES: [f32; 3] = [2.0, 3.0, 5.0];
     glium::DrawParameters {
         point_size: Some(POINT_SIZES[point_size]),
-        multisampling: true,
-        blend: glium::Blend::alpha_blending(),
+        //depth: glium::Depth {
+        //    test: glium::DepthTest::Overwrite,
+        //    write: true,
+        //    ..Default::default()
+        //},
+        //blend: glium::Blend::alpha_blending(),
+        //blend: glium::Blend {
+        //    color: glium::BlendingFunction::ReverseSubtraction {
+        //        source: glium::LinearBlendingFactor::One,
+        //        destination: glium::LinearBlendingFactor::One,
+        //    },
+        //    alpha: glium::BlendingFunction::ReverseSubtraction {
+        //        source: glium::LinearBlendingFactor::One,
+        //        destination: glium::LinearBlendingFactor::One,
+        //    },
+        //    ..Default::default()
+        //},
+        //blend: glium::Blend {
+        //    color: glium::BlendingFunction::ReverseSubtraction {
+        //        source: glium::LinearBlendingFactor::One,
+        //        destination: glium::LinearBlendingFactor::One,
+        //    },
+        //    ..Default::default()
+        //},
+        line_width: None,
         ..Default::default()
     }
 }

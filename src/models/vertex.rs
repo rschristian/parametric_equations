@@ -68,10 +68,11 @@ pub fn create_vertex_vector() -> Vec<Vertex> {
     let mut vertex_array = vec![Vertex::new(); (ITERATIONS * STEPS) as usize];
     let mut alpha_offset = 0.0;
     for (i, vertex) in vertex_array.iter_mut().enumerate() {
-        if (i + 1) as i32 % ITERATIONS == 0 {
+        let tmp = (i + 1) as i32 % ITERATIONS;
+        if tmp == 0 {
             alpha_offset += 1.0/(ITERATIONS as f32);
         }
-        vertex.set_color((i + 1) as i32 % ITERATIONS, alpha_offset);
+        vertex.set_color(tmp, alpha_offset);
     }
     vertex_array
 }
