@@ -63,6 +63,10 @@ impl Globals {
         self.point_size = (self.point_size + 1) % 3;
     }
 
+    pub fn decrease_point_size(&mut self) {
+        self.point_size = (self.point_size - 1) % 3;
+    }
+
     pub fn text_system_font_texture(&self) -> &(TextSystem, FontTexture) {
         &self.text_system_font_texture
     }

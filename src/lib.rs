@@ -69,6 +69,16 @@ fn run_main_loop(event_loop: glutin::event_loop::EventLoop<()>, display: glium::
                                     globals.increase_point_size();
                                 }
                             }
+                            glutin::event::VirtualKeyCode::PageDown => {
+                                if input.state == glutin::event::ElementState::Pressed {
+                                    globals.decrease_point_size();
+                                }
+                            }
+                            glutin::event::VirtualKeyCode::N => {
+                                if input.state == glutin::event::ElementState::Pressed {
+                                    globals.increase_t(6.0);
+                                }
+                            }
                             _ => return,
                         }
                     }
