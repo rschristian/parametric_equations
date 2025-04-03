@@ -1,7 +1,7 @@
 use glium::{Display, DrawParameters, Frame, Surface};
 
 use crate::models::state::State;
-use crate::models::vertex::VertexSlice;
+use crate::models::vertex::Vertex;
 
 fn vertex_shader() -> &'static str {
     r#"
@@ -48,9 +48,9 @@ pub fn draw_vertices(
     display: &Display,
     target: &mut Frame,
     state: &State,
-    vertex_slice: &VertexSlice,
+    vertex_vector: &[Vertex],
 ) {
-    let vertex_buffer = glium::VertexBuffer::new(display, vertex_slice).unwrap();
+    let vertex_buffer = glium::VertexBuffer::new(display, vertex_vector).unwrap();
     let index_buffer = glium::index::NoIndices(glium::index::PrimitiveType::Points);
 
     let program =

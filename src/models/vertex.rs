@@ -40,9 +40,8 @@ fn generate_color_from_iterator_position(i: u32) -> [f32; 4] {
     [red, green, blue, 1.0]
 }
 
-pub type VertexSlice = [Vertex; TOTAL_VERTICES];
-
-pub fn create_vertex_slice() -> VertexSlice {
-    //core::array::from_fn(|i| Vertex::new_with_color(i))
-    core::array::from_fn(|i| Vertex::new_with_color(i as u32 % ITERATIONS))
+pub fn create_vertex_slice() -> Vec<Vertex> {
+    (0..TOTAL_VERTICES)
+        .map(|i| Vertex::new_with_color(i as u32 % ITERATIONS))
+        .collect::<Vec<_>>()
 }

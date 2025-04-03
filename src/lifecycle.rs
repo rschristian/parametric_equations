@@ -4,11 +4,11 @@ use rand::Rng;
 
 use crate::models::state::State;
 use crate::models::vertex::create_vertex_slice;
-use crate::models::vertex::VertexSlice;
+use crate::models::vertex::Vertex;
 
 pub type Parameters = ([i8; 9], [i8; 9]);
 
-pub fn initialize(state: &mut State) -> (Parameters, (String, String), VertexSlice) {
+pub fn initialize(state: &mut State) -> (Parameters, (String, String), Vec<Vertex>) {
     state.reset_t();
 
     let params = (rand_params(), rand_params());

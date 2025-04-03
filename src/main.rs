@@ -39,7 +39,7 @@ fn run_main_loop(event_loop: glutin::event_loop::EventLoop<()>, display: glium::
 
     let mut state = models::state::State::new();
 
-    let (mut params, mut equation_strings, mut vertex_slice) = lifecycle::initialize(&mut state);
+    let (mut params, mut equation_strings, mut vertex_vector) = lifecycle::initialize(&mut state);
 
     event_loop.run(move |event, _, control_flow| {
         let next_frame_time =
@@ -98,10 +98,10 @@ fn run_main_loop(event_loop: glutin::event_loop::EventLoop<()>, display: glium::
         }
 
         if state.t >= constants::T_END {
-            (params, equation_strings, vertex_slice) = lifecycle::initialize(&mut state);
+            (params, equation_strings, vertex_vector) = lifecycle::initialize(&mut state);
         }
 
-        chaos::apply_chaos(&mut state, &params, &mut vertex_slice);
+        chaos::apply_chaos(&mut state, &params, &mut vertex_vector);
 
         let mut target = display.draw();
         target.clear_color_and_depth((0.0, 0.0, 0.0, 1.0), 1.0);
@@ -115,7 +115,7 @@ fn run_main_loop(event_loop: glutin::event_loop::EventLoop<()>, display: glium::
             &equation_strings,
         );
 
-        visuals::objects::draw_vertices(&display, &mut target, &state, &vertex_slice);
+        visuals::objects::draw_vertices(&display, &mut target, &state, &vertex_vector);
 
         target.finish().unwrap();
     });
