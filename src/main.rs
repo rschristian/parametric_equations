@@ -106,6 +106,9 @@ fn run_main_loop(event_loop: glutin::event_loop::EventLoop<()>, display: glium::
         let mut target = display.draw();
         target.clear_color_and_depth((0.0, 0.0, 0.0, 1.0), 1.0);
 
+        visuals::objects::draw_vertices(&display, &mut target, &state, &vertex_vector);
+        visuals::objects::draw_fade_overlay(&display, &mut target);
+
         visuals::text::draw_text(
             &display,
             &mut target,
@@ -114,8 +117,6 @@ fn run_main_loop(event_loop: glutin::event_loop::EventLoop<()>, display: glium::
             &state,
             &equation_strings,
         );
-
-        visuals::objects::draw_vertices(&display, &mut target, &state, &vertex_vector);
 
         target.finish().unwrap();
     });
