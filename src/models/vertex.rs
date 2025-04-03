@@ -1,4 +1,4 @@
-use crate::constants::{TOTAL_VERTICES, WINDOW_HEIGHT, WINDOW_WIDTH};
+use crate::constants::{ITERATIONS, TOTAL_VERTICES, WINDOW_HEIGHT, WINDOW_WIDTH};
 use crate::models::coordinate::Coordinate;
 use std::cmp;
 
@@ -10,7 +10,7 @@ pub struct Vertex {
 }
 
 impl Vertex {
-    pub fn new_with_color(i: usize) -> Vertex {
+    pub fn new_with_color(i: u32) -> Vertex {
         Vertex {
             color: generate_color_from_iterator_position(i),
             position: Coordinate::new(),
@@ -31,7 +31,7 @@ impl Vertex {
 
 implement_vertex!(Vertex, position, color);
 
-fn generate_color_from_iterator_position(i: usize) -> [f32; 4] {
+fn generate_color_from_iterator_position(i: u32) -> [f32; 4] {
     let i = i + 1;
     let red = cmp::min(255, 50 + (i * 11909) % 256) as f32 / 255.0;
     let green = cmp::min(255, 50 + (i * 52973) % 256) as f32 / 255.0;
@@ -44,5 +44,5 @@ pub type VertexSlice = [Vertex; TOTAL_VERTICES];
 
 pub fn create_vertex_slice() -> VertexSlice {
     //core::array::from_fn(|i| Vertex::new_with_color(i))
-    core::array::from_fn(Vertex::new_with_color)
+    core::array::from_fn(|i| Vertex::new_with_color(i as u32 % ITERATIONS))
 }
