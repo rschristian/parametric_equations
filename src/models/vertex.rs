@@ -5,27 +5,23 @@ use std::cmp;
 /// A vertex is defined by an RGB+Opacity color value and an (x,y) coordinate point
 #[derive(Copy, Clone)]
 pub struct Vertex {
-    pub color: [f32; 4],
     pub position: Coordinate,
+    pub color: [f32; 4],
 }
 
 impl Vertex {
     pub fn new_with_color(i: u32) -> Vertex {
         Vertex {
-            color: generate_color_from_iterator_position(i),
             position: Coordinate::new(),
+            color: generate_color_from_iterator_position(i),
         }
-    }
-
-    fn set_position(&mut self, new_position: Coordinate) {
-        self.position = new_position;
     }
 
     /// Converts the vertex's position from e.g. 1600 x 900 to -1.0-1.0 in both x and y axis.
     pub fn set_position_within_window_dimensions(&mut self, new_coordinates: Coordinate) {
         let nx = (new_coordinates.x - (WINDOW_WIDTH / 2) as f64) / (WINDOW_WIDTH / 2) as f64;
         let ny = (new_coordinates.y - (WINDOW_HEIGHT / 2) as f64) / (WINDOW_HEIGHT / 2) as f64;
-        self.set_position(Coordinate::new_with_values(nx, ny));
+        self.position = Coordinate::new_with_values(nx, ny);
     }
 }
 

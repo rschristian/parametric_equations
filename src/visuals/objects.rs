@@ -7,8 +7,8 @@ fn vertex_shader() -> &'static str {
     r#"
         #version 140
 
-        in vec4 color;
         in vec2 position;
+        in vec4 color;
 
         out vec4 v_color;
 
@@ -25,10 +25,10 @@ fn fragment_shader() -> &'static str {
 
         in vec4 v_color;
 
-        out vec4 color_final;
+        out vec4 color;
 
         void main() {
-            color_final = vec4(v_color);
+            color = v_color;
         }
     "#
 }
