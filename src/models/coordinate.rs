@@ -2,8 +2,8 @@ use glium::vertex::AttributeType;
 
 #[derive(Copy, Clone)]
 pub struct Coordinate {
-    x: f64,
-    y: f64,
+    pub x: f64,
+    pub y: f64,
 }
 
 impl Coordinate {
@@ -21,16 +21,6 @@ impl Coordinate {
     ///
     pub fn new_with_values(nx: f64, ny: f64) -> Coordinate {
         Coordinate { x: nx, y: ny }
-    }
-
-    /// Get X value of coordinate
-    pub fn x(&self) -> f64 {
-        self.x
-    }
-
-    /// Get Y value of coordinate
-    pub fn y(&self) -> f64 {
-        self.y
     }
 }
 

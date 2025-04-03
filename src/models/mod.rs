@@ -1,4 +1,3 @@
 pub mod coordinate;
-pub mod globals;
-pub mod parameters;
+pub mod state;
 pub mod vertex;
