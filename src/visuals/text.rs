@@ -1,27 +1,50 @@
-use crate::config::{SUBTITLE_TEXT_WIDTH, TITLE_TEXT_WIDTH};
-use crate::models::globals::Globals;
-use glium::Frame;
+use glium::{Display, Frame};
 
-/// Draws the current equations to the frame
-///
-/// # Arguments
-///
-/// * `equation_text` - A reference to a tuple that contains the strings for the x & y prime equations
-/// * `globals` - A struct of global values that includes the display and text properties
-/// * `target` - A reference to the current frame buffer
-///
-pub fn draw_equation_text(equation_text: &(String, String), globals: &Globals, target: &mut Frame) {
-    let (system, texture) = globals.text_system_font_texture();
-    let (x_prime, y_prime) = equation_text;
+use crate::constants::{SUBTITLE_TEXT_WIDTH, TITLE_TEXT_WIDTH};
+use crate::models::state::State;
 
-    let x_prime_text = glium_text::TextDisplay::new(system, texture, x_prime);
-    let y_prime_text = glium_text::TextDisplay::new(system, texture, y_prime);
-    let (w, h) = globals.display().get_framebuffer_dimensions();
+use glium_text::{FontTexture, TextSystem};
+
+pub fn draw_text(
+    display: &Display,
+    target: &mut Frame,
+    text_system: &TextSystem,
+    font_texture: &FontTexture,
+    state: &State,
+    equation_strings: &(String, String),
+) {
+    let (w, h) = display.get_framebuffer_dimensions();
+    let (width, height) = (w as f32, h as f32);
+
+    draw_equation_text(
+        target,
+        text_system,
+        font_texture,
+        (width, height),
+        equation_strings,
+    );
+    draw_time_text(target, text_system, font_texture, (width, height), state);
+    draw_speed_multiplier_text(target, text_system, font_texture, (width, height), state);
+    draw_point_size_text(target, text_system, font_texture, (width, height), state);
+}
+
+fn draw_equation_text(
+    target: &mut Frame,
+    text_system: &TextSystem,
+    font_texture: &FontTexture,
+    dimensions: (f32, f32),
+    equation_strings: &(String, String),
+) {
+    let (width, height) = dimensions;
+    let (x_prime, y_prime) = equation_strings;
+
+    let x_prime_text = glium_text::TextDisplay::new(text_system, font_texture, x_prime);
+    let y_prime_text = glium_text::TextDisplay::new(text_system, font_texture, y_prime);
 
     #[rustfmt::skip]
     let x_prime_matrix: [[f32; 4]; 4] = cgmath::Matrix4::new(
         0.5 / TITLE_TEXT_WIDTH, 0.0, 0.0, 0.0,
-        0.0, 0.5 * (w as f32) / (h as f32) / TITLE_TEXT_WIDTH, 0.0, 0.0,
+        0.0, 0.5 * width / height / TITLE_TEXT_WIDTH, 0.0, 0.0,
         0.0, 0.0, 1.0, 0.0,
         -0.98, 0.92, 0.0, 1.0f32,
     )
@@ -30,7 +53,7 @@ pub fn draw_equation_text(equation_text: &(String, String), globals: &Globals, t
     #[rustfmt::skip]
     let y_prime_matrix: [[f32; 4]; 4] = cgmath::Matrix4::new(
         0.5 / TITLE_TEXT_WIDTH, 0.0, 0.0, 0.0,
-        0.0, 0.5 * (w as f32) / (h as f32) / TITLE_TEXT_WIDTH, 0.0, 0.0,
+        0.0, 0.5 * width / height / TITLE_TEXT_WIDTH, 0.0, 0.0,
         0.0, 0.0, 1.0, 0.0,
         -0.98, 0.80, 0.0, 1.0f32,
     )
@@ -38,40 +61,38 @@ pub fn draw_equation_text(equation_text: &(String, String), globals: &Globals, t
 
     glium_text::draw(
         &x_prime_text,
-        system,
+        text_system,
         target,
         x_prime_matrix,
         (1.0, 1.0, 1.0, 1.0),
     );
     glium_text::draw(
         &y_prime_text,
-        system,
+        text_system,
         target,
         y_prime_matrix,
         (1.0, 1.0, 1.0, 1.0),
     );
 }
 
-/// Draws the current time to the frame
-///
-/// # Arguments
-///
-/// * `globals` - A struct of global values that includes the current t value and text properties
-/// * `target` - A reference to the current frame buffer
-///
-pub fn draw_time_text(globals: &Globals, target: &mut Frame) {
-    let (system, texture) = globals.text_system_font_texture();
+fn draw_time_text(
+    target: &mut Frame,
+    text_system: &TextSystem,
+    font_texture: &FontTexture,
+    dimensions: (f32, f32),
+    state: &State,
+) {
+    let (width, height) = dimensions;
 
-    let truncated_time = format!("{:.4}", globals.t());
+    let truncated_time = format!("{:.4}", state.t);
     let time_text = "t: ".to_owned() + truncated_time.as_ref();
 
-    let time_text = glium_text::TextDisplay::new(system, texture, time_text.as_ref());
-    let (w, h) = globals.display().get_framebuffer_dimensions();
+    let time_text = glium_text::TextDisplay::new(text_system, font_texture, time_text.as_ref());
 
     #[rustfmt::skip]
     let time_matrix: [[f32; 4]; 4] = cgmath::Matrix4::new(
         0.5 / TITLE_TEXT_WIDTH, 0.0, 0.0, 0.0,
-        0.0, 0.5 * (w as f32) / (h as f32) / TITLE_TEXT_WIDTH, 0.0, 0.0,
+        0.0, 0.5 * width / height / TITLE_TEXT_WIDTH, 0.0, 0.0,
         0.0, 0.0, 1.0, 0.0,
         0.72, 0.92, 0.0, 1.0f32,
     )
@@ -79,34 +100,32 @@ pub fn draw_time_text(globals: &Globals, target: &mut Frame) {
 
     glium_text::draw(
         &time_text,
-        system,
+        text_system,
         target,
         time_matrix,
         (1.0, 1.0, 1.0, 1.0),
     );
 }
 
-/// Draws the current speed multiplier to the frame
-///
-/// # Arguments
-///
-/// * `globals` - A struct of global values that includes the current multiplier value and text properties
-/// * `target` - A reference to the current frame buffer
-///
-pub fn draw_speed_multiplier_text(globals: &Globals, target: &mut Frame) {
-    let (system, texture) = globals.text_system_font_texture();
+fn draw_speed_multiplier_text(
+    target: &mut Frame,
+    text_system: &TextSystem,
+    font_texture: &FontTexture,
+    dimensions: (f32, f32),
+    state: &State,
+) {
+    let (width, height) = dimensions;
 
-    let truncated_multiplier = format!("{:.2}", globals.speed_multiplier());
+    let truncated_multiplier = format!("{:.2}", state.speed_multiplier);
     let speed_multiplier_text = "Speed Multiplier: ".to_owned() + truncated_multiplier.as_ref();
 
     let speed_multiplier_text =
-        glium_text::TextDisplay::new(system, texture, speed_multiplier_text.as_ref());
-    let (w, h) = globals.display().get_framebuffer_dimensions();
+        glium_text::TextDisplay::new(text_system, font_texture, speed_multiplier_text.as_ref());
 
     #[rustfmt::skip]
     let speed_multiplier_matrix: [[f32; 4]; 4] = cgmath::Matrix4::new(
         0.5 / SUBTITLE_TEXT_WIDTH, 0.0, 0.0, 0.0,
-        0.0, 0.5 * (w as f32) / (h as f32) / SUBTITLE_TEXT_WIDTH, 0.0, 0.0,
+        0.0, 0.5 * width / height / SUBTITLE_TEXT_WIDTH, 0.0, 0.0,
         0.0, 0.0, 1.0, 0.0,
         -0.98, 0.60, 0.0, 1.0f32,
     )
@@ -114,33 +133,32 @@ pub fn draw_speed_multiplier_text(globals: &Globals, target: &mut Frame) {
 
     glium_text::draw(
         &speed_multiplier_text,
-        system,
+        text_system,
         target,
         speed_multiplier_matrix,
         (1.0, 1.0, 1.0, 1.0),
     );
 }
 
-/// Draws the current point size to the frame
-///
-/// # Arguments
-///
-/// * `globals` - A struct of global values that includes the current point size and text properties
-/// * `target` - A reference to the current frame buffer
-///
-pub fn draw_point_size_text(globals: &Globals, target: &mut Frame) {
-    let (system, texture) = globals.text_system_font_texture();
+fn draw_point_size_text(
+    target: &mut Frame,
+    text_system: &TextSystem,
+    font_texture: &FontTexture,
+    dimensions: (f32, f32),
+    state: &State,
+) {
+    let (width, height) = dimensions;
 
-    let point_size_string = (globals.point_size() + 1).to_string();
+    let point_size_string = (state.point_size + 1).to_string();
     let point_size_text = "Point Size: ".to_owned() + point_size_string.as_ref();
 
-    let point_size_text = glium_text::TextDisplay::new(system, texture, point_size_text.as_ref());
-    let (w, h) = globals.display().get_framebuffer_dimensions();
+    let point_size_text =
+        glium_text::TextDisplay::new(text_system, font_texture, point_size_text.as_ref());
 
     #[rustfmt::skip]
     let point_size_matrix: [[f32; 4]; 4] = cgmath::Matrix4::new(
         0.5 / SUBTITLE_TEXT_WIDTH, 0.0, 0.0, 0.0,
-        0.0, 0.5 * (w as f32) / (h as f32) / SUBTITLE_TEXT_WIDTH, 0.0, 0.0,
+        0.0, 0.5 * width / height / SUBTITLE_TEXT_WIDTH, 0.0, 0.0,
         0.0, 0.0, 1.0, 0.0,
         -0.98, 0.50, 0.0, 1.0f32,
     )
@@ -148,7 +166,7 @@ pub fn draw_point_size_text(globals: &Globals, target: &mut Frame) {
 
     glium_text::draw(
         &point_size_text,
-        system,
+        text_system,
         target,
         point_size_matrix,
         (1.0, 1.0, 1.0, 1.0),
