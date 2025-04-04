@@ -25,6 +25,7 @@ impl Coordinate {
 }
 
 unsafe impl glium::vertex::Attribute for Coordinate {
+    const TYPE: AttributeType = AttributeType::F64F64;
     fn get_type() -> AttributeType {
         glium::vertex::AttributeType::F64F64
     }

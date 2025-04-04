@@ -1,3 +1,4 @@
+use glium::glutin::surface::WindowSurface;
 use glium::{Display, DrawParameters, Frame, Surface};
 
 use crate::models::state::State;
@@ -44,7 +45,7 @@ fn setup_draw_params<'a>(point_size: usize) -> DrawParameters<'a> {
 }
 
 pub fn draw_vertices(
-    display: &Display,
+    display: &Display<WindowSurface>,
     target: &mut Frame,
     state: &State,
     vertex_vector: &[Vertex],
@@ -68,7 +69,7 @@ pub fn draw_vertices(
         .unwrap();
 }
 
-pub fn draw_fade_overlay(display: &Display, target: &mut Frame) {
+pub fn draw_fade_overlay(display: &Display<WindowSurface>, target: &mut Frame) {
     #[derive(Copy, Clone)]
     struct Vertex {
         position: [f32; 2],

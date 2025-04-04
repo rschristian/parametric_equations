@@ -1,3 +1,4 @@
+use glium::glutin::surface::WindowSurface;
 use glium::{Display, Frame};
 
 use crate::constants::{SUBTITLE_TEXT_WIDTH, TITLE_TEXT_WIDTH};
@@ -6,7 +7,7 @@ use crate::models::state::State;
 use glium_text::{FontTexture, TextSystem};
 
 pub fn draw_text(
-    display: &Display,
+    display: &Display<WindowSurface>,
     target: &mut Frame,
     text_system: &TextSystem,
     font_texture: &FontTexture,
