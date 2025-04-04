@@ -1,6 +1,6 @@
 [package]
 name = "parametric_equations"
-version = "0.3.0"
+version = "0.4.0"
 authors = ["Ryan Christian <rchristian@rschristian.dev>"]
 edition = "2018"
 
