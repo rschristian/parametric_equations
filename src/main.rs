@@ -73,7 +73,7 @@ fn run_main_loop(
                         _ => (),
                     },
                     winit::event::WindowEvent::RedrawRequested => {
-                        let time_start = std::time::Instant::now();
+                        //let time_start = std::time::Instant::now();
                         if state.t >= constants::T_END {
                             (params, equation_strings, vertex_vector) =
                                 lifecycle::initialize(&mut state);
@@ -103,8 +103,8 @@ fn run_main_loop(
 
                         target.finish().unwrap();
 
-                        let time_end = std::time::Instant::now();
-                        println!("Frame time: {} ms", (time_end - time_start).as_millis());
+                        //let time_end = std::time::Instant::now();
+                        //println!("Frame time: {} ms", (time_end - time_start).as_millis());
                     }
                     _ => (),
                 },
