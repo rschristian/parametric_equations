@@ -48,25 +48,25 @@ fn calculate_new_coords(xy: (f64, f64), t: f64, params: &Parameters) -> (f64, f6
     let xt = x * t;
     let yt = y * t;
 
-    let nx = xx * (params_x[0] as f64)
-        + yy * (params_x[1] as f64)
-        + tt * (params_x[2] as f64)
-        + xy * (params_x[3] as f64)
-        + xt * (params_x[4] as f64)
-        + yt * (params_x[5] as f64)
-        + x * (params_x[6] as f64)
-        + y * (params_x[7] as f64)
-        + t * (params_x[8] as f64);
+    let nx = xx * params_x[0]
+        + yy * params_x[1]
+        + tt * params_x[2]
+        + xy * params_x[3]
+        + xt * params_x[4]
+        + yt * params_x[5]
+        + x * params_x[6]
+        + y * params_x[7]
+        + t * params_x[8];
 
-    let ny = xx * (params_y[0] as f64)
-        + yy * (params_y[1] as f64)
-        + tt * (params_y[2] as f64)
-        + xy * (params_y[3] as f64)
-        + xt * (params_y[4] as f64)
-        + yt * (params_y[5] as f64)
-        + x * (params_y[6] as f64)
-        + y * (params_y[7] as f64)
-        + t * (params_y[8] as f64);
+    let ny = xx * params_y[0]
+        + yy * params_y[1]
+        + tt * params_y[2]
+        + xy * params_y[3]
+        + xt * params_y[4]
+        + yt * params_y[5]
+        + x * params_y[6]
+        + y * params_y[7]
+        + t * params_y[8];
 
     (nx, ny)
 }

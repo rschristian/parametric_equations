@@ -6,7 +6,7 @@ use crate::models::state::State;
 use crate::models::vertex::create_vertex_slice;
 use crate::models::vertex::Vertex;
 
-pub type Parameters = ([i8; 9], [i8; 9]);
+pub type Parameters = ([f64; 9], [f64; 9]);
 
 pub fn initialize(state: &mut State) -> (Parameters, (String, String), Vec<Vertex>) {
     state.reset_t();
@@ -27,13 +27,13 @@ pub fn initialize(state: &mut State) -> (Parameters, (String, String), Vec<Verte
 
 const NUMBER_OF_PARAMS: usize = 9;
 
-fn rand_params() -> [i8; NUMBER_OF_PARAMS] {
-    let mut rng = rand::thread_rng();
+fn rand_params() -> [f64; NUMBER_OF_PARAMS] {
+    let mut rng = rand::rng();
 
-    core::array::from_fn(|_| rng.gen_range(-1, 2))
+    core::array::from_fn(|_| rng.random_range(-1..2) as f64)
 }
 
-fn build_equation_string(params: [i8; 9]) -> String {
+fn build_equation_string(params: [f64; 9]) -> String {
     let mut equation_string = String::new();
     let mut is_first = true;
 
@@ -42,12 +42,12 @@ fn build_equation_string(params: [i8; 9]) -> String {
     ];
 
     for i in 0..equation_variables.len() {
-        if params[i] != 0 {
+        if params[i] != 0.0 {
             if is_first {
-                if params[i] == -1 {
+                if params[i] == -1.0 {
                     equation_string.push('-');
                 }
-            } else if params[i] == -1 {
+            } else if params[i] == -1.0 {
                 equation_string.push_str(" - ");
             } else {
                 equation_string.push_str(" + ");
